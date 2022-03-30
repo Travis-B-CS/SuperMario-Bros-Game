@@ -1,0 +1,17 @@
+import Igis
+import Scenes
+import Foundation
+
+class LevelHandler : RenderableEntity {
+    let marioSprite : Mario
+    var currentLevel = 0
+    
+    init(mario:Mario) {
+        marioSprite = mario
+        currentLevel = 0
+    }
+
+    override func calculate(canvasSize: Size) {
+        
+    }
+}
