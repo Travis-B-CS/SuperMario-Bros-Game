@@ -11,7 +11,7 @@ import Igis
 class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
 
     let questionTile : QuestionBlockTile
-    let marioSprite : Mario;
+    let marioSprite : Mario
     let levelHandler : LevelHandler
     
     init() {
