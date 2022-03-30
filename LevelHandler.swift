@@ -19,4 +19,39 @@ class LevelHandler : RenderableEntity {
     func setHandler(handler:InteractionLayer) {
         interactionLayer = handler;
     }
+
+    func levelOne() {
+        if let interactionLayer = inteactionLayer {
+            let coin = Coin()
+            interactionLayer.renderCoin(coin: coin)
+        }
+        
+    }
+
+    func levelTwo() {
+    }
+
+    func levelThree() {
+    }
+
+    func levelFour() {
+    }
+
+    func levelFive() {
+    }
+
+    func levelSix() {
+    }
+
+    func levelSeven() {
+    }
+
+    func levelEight() {
+    }
+
+    func levelNine() {
+    }
+
+    func levelTen() {
+    }
 }
