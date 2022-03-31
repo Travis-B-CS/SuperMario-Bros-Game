@@ -21,7 +21,7 @@ class LevelHandler : RenderableEntity {
     }
 
     func levelOne() {
-        if let interactionLayer = inteactionLayer {
+        if let interactionLayer = interactionLayer {
             let coin = Coin()
             interactionLayer.renderCoin(coin: coin)
         }
