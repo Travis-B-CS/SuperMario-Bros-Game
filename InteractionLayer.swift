@@ -18,7 +18,7 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
         questionTile = QuestionBlockTile(whatInside:"coin")
         marioSprite = Mario(tiles:[questionTile])
         levelHandler = LevelHandler(mario:marioSprite)
-
+        
         // Using a meaningful name can be helpful for debugging
         super.init(name:"Interaction")
         
@@ -35,6 +35,12 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
         
         dispatcher.registerKeyDownHandler(handler: self)
         dispatcher.registerKeyUpHandler(handler: self)
+    }
+
+    override func postSetup(canvasSize:Size, canvas:Canvas) {
+        
+        levelHandler.levelOne(canvasSize: canvasSize)
+
     }
 
     override func postTeardown() {
@@ -84,6 +90,7 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
     }
 
     func renderCoin(coin:Coin) {
-        insert(entity:coin, at:.front)
+        print("InteractionLayer - Rendering Coin")
+        insert(entity:coin, at:.behind(object:marioSprite))
     }
 }

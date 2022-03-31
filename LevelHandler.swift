@@ -20,12 +20,13 @@ class LevelHandler : RenderableEntity {
         interactionLayer = handler;
     }
 
-    func levelOne() {
-        if let interactionLayer = inteactionLayer {
+    func levelOne(canvasSize: Size) {
+        if let interactionLayer = interactionLayer {
             let coin = Coin()
+            coin.setRect(newRect: Rect(topLeft:Point(x:canvasSize.width / 2, y:canvasSize.height - 96 - 96 - 30), size:Size(width:96,height:96)))
+            coin.setActive(value: true)
             interactionLayer.renderCoin(coin: coin)
         }
-        
     }
 
     func levelTwo() {

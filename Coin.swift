@@ -27,7 +27,7 @@ class Coin : RenderableEntity {
         coinMoreTurnedLeft = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/coinMoreTurnedLeft.png")
         coinSideways = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/coinSideways.png")
         coinMoreTurnedRight = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/coinMoreTurnedRight.png")
-        coinSlightlyTurnedRight = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/coinSlightlyTurned.png")
+        coinSlightlyTurnedRight = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/coinSlightlyTurnedRight.png")
     }
 
     // Setup images
