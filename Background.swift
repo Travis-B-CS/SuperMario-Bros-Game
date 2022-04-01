@@ -14,7 +14,6 @@ class Background : RenderableEntity {
     var background : Rectangle
     var didGetInfo = false
     var bounds = Size(width:0,height:0)
-    var score = 0
     var time : Date
 
     func getWidthWithinBounds(x: Int, width: Int) -> Int {
@@ -74,10 +73,6 @@ class Background : RenderableEntity {
             canvas.render(FillStyle(color:Color(.white)), StrokeStyle(color:Color(.white)))
             
             var text = Text(location:Point(x:50, y:50), text:"MARIO")
-            text.font = "30pt Arial"
-            canvas.render(text)
-
-            text = Text(location:Point(x:50, y:90), text:String(score))
             text.font = "30pt Arial"
             canvas.render(text)
 

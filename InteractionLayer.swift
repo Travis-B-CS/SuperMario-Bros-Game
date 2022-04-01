@@ -10,25 +10,21 @@ import Igis
 
 class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
 
-    let questionTile : QuestionBlockTile
     let marioSprite : Mario
     let levelHandler : LevelHandler
     
     init() {
-        questionTile = QuestionBlockTile(whatInside:"coin")
-        marioSprite = Mario(tiles:[questionTile])
+        marioSprite = Mario(tiles:[])
         levelHandler = LevelHandler(mario:marioSprite)
         
         // Using a meaningful name can be helpful for debugging
         super.init(name:"Interaction")
         
         // We insert our RenderableEntities in the constructor
-        insert(entity:questionTile, at:.front)
         insert(entity:marioSprite, at:.front)
     }
     
     override func preSetup(canvasSize: Size, canvas: Canvas) {
-        questionTile.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
         marioSprite.move(to: Point(x:10, y:canvasSize.height-200-96))
 
         levelHandler.setHandler(handler: self)
@@ -89,8 +85,11 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
         }
     }
 
+    func renderQuestionBlockTile(questionTile:QuestionBlockTile) {
+        insert(entity:questionTile, at:.front)
+    }
+    
     func renderCoin(coin:Coin) {
-        print("InteractionLayer - Rendering Coin")
         insert(entity:coin, at:.behind(object:marioSprite))
     }
 }

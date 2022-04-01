@@ -6,6 +6,7 @@ class QuestionBlockTile : RenderableEntity {
 
     let questionTile : Image
     let blankTile : Image
+    var insideCoin : Coin?
     var activated = false
     var activatedTimer = 0
     var topLeft = Point(x:0,y:0)
@@ -33,7 +34,14 @@ class QuestionBlockTile : RenderableEntity {
     override func calculate(canvasSize: Size) {
         if(activated == true && activatedTimer < 20) {
             if(inside == "coin") {
-                
+                if let insideCoin = insideCoin {
+                    if(activatedTimer >= 12) {
+                        insideCoin.setActive(value: true)
+                    }
+                    var coinRect = insideCoin.rect
+                    coinRect.topLeft.y -= 96/20 + 1
+                    insideCoin.setRect(newRect: coinRect)
+                }
             }
             
             if(activatedTimer < 10) {
@@ -42,6 +50,14 @@ class QuestionBlockTile : RenderableEntity {
                 topLeft.y += (96 / 10)
             }
             activatedTimer += 1
+        }
+        else if activated == true && activatedTimer <= 60 {
+            activatedTimer += 1
+        }
+        else if (activatedTimer > 60) {
+            if let insideCoin = insideCoin {
+                insideCoin.setActive(value: false)
+            }
         }
     }
 
@@ -65,6 +81,10 @@ class QuestionBlockTile : RenderableEntity {
         inside = value
     }
 
+    func setInsideCoin(value: Coin) {
+        insideCoin = value
+    }
+    
     func setActivated(value : Bool) {
         activated = value
     }
