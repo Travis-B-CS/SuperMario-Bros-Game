@@ -1,3 +1,4 @@
+
 import Igis
 import Scenes
 import Foundation
@@ -7,6 +8,7 @@ class QuestionBlockTile : RenderableEntity {
     let questionTile : Image
     let blankTile : Image
     var insideCoin : Coin?
+    var levelHandler : LevelHandler?
     var activated = false
     var activatedTimer = 0
     var topLeft = Point(x:0,y:0)
@@ -55,8 +57,15 @@ class QuestionBlockTile : RenderableEntity {
             activatedTimer += 1
         }
         else if (activatedTimer > 60) {
-            if let insideCoin = insideCoin {
-                insideCoin.setActive(value: false)
+            if (inside == "coin") {
+                if let insideCoin = insideCoin {
+                    if(insideCoin.isActive) {
+                        if let levelHandler = levelHandler {
+                            levelHandler.setScore(value: levelHandler.score + 1)
+                        }
+                        insideCoin.setActive(value: false)
+                    }
+                }
             }
         }
     }
@@ -83,6 +92,10 @@ class QuestionBlockTile : RenderableEntity {
 
     func setInsideCoin(value: Coin) {
         insideCoin = value
+    }
+
+    func setLevelHandler(handler: LevelHandler) {
+        levelHandler = handler
     }
     
     func setActivated(value : Bool) {

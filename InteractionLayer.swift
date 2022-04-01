@@ -22,6 +22,7 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
         
         // We insert our RenderableEntities in the constructor
         insert(entity:marioSprite, at:.front)
+        insert(entity:levelHandler, at:.front)
     }
     
     override func preSetup(canvasSize: Size, canvas: Canvas) {
