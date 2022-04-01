@@ -22,10 +22,18 @@ class LevelHandler : RenderableEntity {
 
     func levelOne(canvasSize:Size) {
         if let interactionLayer = interactionLayer {
+            let questionTile = QuestionBlockTile(whatInside:"coin")
+            questionTile.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
             let coin = Coin()
-            coin.setRect(newRect: Rect(topLeft:Point(x:canvasSize.width / 2, y:canvasSize.height - 96 - 96 - 30), size:Size(width:96,height:96)))
-            coin.setActive(value: true)
+            coin.setRect(newRect: questionTile.rect)
+            coin.setActive(value: false)
+
+            questionTile.setInsideCoin(value: coin)
+            
             interactionLayer.renderCoin(coin: coin)
+            interactionLayer.renderQuestionBlockTile(questionTile: questionTile)
+
+            interactionLayer.marioSprite.setBoxes(tiles: [questionTile])
         }
     }
 
