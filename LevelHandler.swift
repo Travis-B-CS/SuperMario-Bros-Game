@@ -4,13 +4,13 @@ import Foundation
 
 class LevelHandler : RenderableEntity {
     let marioSprite : Mario
-    var currentLevel : Int
+    var currentLevel = 1
     var interactionLayer : InteractionLayer?
     var score = 0
+    var activeEntities : [RenderableEntity] = [];
     
     init(mario:Mario) {
         marioSprite = mario
-        currentLevel = 0
 
         super.init(name: "LevelHandler")
 
@@ -18,7 +18,21 @@ class LevelHandler : RenderableEntity {
     }
 
     override func calculate(canvasSize: Size) {
-        
+        if(marioSprite.topLeft.x + marioSprite.marioSize.width > marioSprite.cSize.width + 10) {
+            clearLevel()
+
+            currentLevel += 1
+            switch(currentLevel) {
+            case 1:
+                levelOne(canvasSize: canvasSize)
+            case 2:
+                levelTwo(canvasSize: canvasSize)
+            case 3:
+                levelThree(canvasSize: canvasSize)
+            default:
+                print("You reached the end!")
+            }
+        }
     }
 
     override func render(canvas: Canvas) {
@@ -33,6 +47,19 @@ class LevelHandler : RenderableEntity {
 
     func setScore(value: Int) {
         score = value
+    }
+
+    func clearLevel() {
+        for entity in activeEntities {
+            if let interactionLayer = interactionLayer {                
+                interactionLayer.removeEntity(entity:entity)
+            }
+        }
+        marioSprite.setBoxes(tiles: [])
+        marioSprite.setCoins(tiles: [])
+        activeEntities = []
+
+        marioSprite.topLeft = Point(x:10, y:marioSprite.topLeft.y)
     }
 
     func levelOne(canvasSize:Size) {
@@ -58,8 +85,6 @@ class LevelHandler : RenderableEntity {
             groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 600, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
             groundCoin3.setActive(value: true)
 
-                        
-
             interactionLayer.renderCoin(coin: groundCoin)
             interactionLayer.renderCoin(coin: groundCoin2)
             interactionLayer.renderCoin(coin: groundCoin3)
@@ -68,13 +93,16 @@ class LevelHandler : RenderableEntity {
 
             marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
             marioSprite.setBoxes(tiles: [questionTile])
+
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin])
         }
     }
 
-    func levelTwo() {
+    func levelTwo(canvasSize: Size) {
+        print("level 2")
     }
 
-    func levelThree() {
+    func levelThree(canvasSize: Size) {
     }
 
     func levelFour() {
