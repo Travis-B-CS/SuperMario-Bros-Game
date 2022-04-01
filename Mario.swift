@@ -12,6 +12,8 @@ class Mario : RenderableEntity {
     var velocityX = 0.0
     var velocityY = 0.0
     var questionTiles : [QuestionBlockTile] = []
+    var coinTiles : [Coin] = []
+    var levelHandler : LevelHandler?
     
     init(tiles:[QuestionBlockTile]) {
         func getImage(url:String) -> Image { // A function for getting Images
@@ -62,6 +64,19 @@ class Mario : RenderableEntity {
                 }
             }
         }
+        
+        for box in coinTiles {
+            if box.isActive {
+                if (topLeft.y <= box.rect.topLeft.y + box.rect.size.height) {
+                    if(!(topLeft.x + marioSize.width < box.rect.topLeft.x || topLeft.x > box.rect.topLeft.x + box.rect.size.width )) {
+                        box.setActive(value: false)
+                        if let levelHandler = levelHandler {
+                            levelHandler.setScore(value: levelHandler.score + 1)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override func setup(canvasSize:Size, canvas:Canvas) {
@@ -109,7 +124,15 @@ class Mario : RenderableEntity {
     }
 
     func setBoxes(tiles:[QuestionBlockTile]) {
-        questionTiles = tiles;
+        questionTiles = tiles
+    }
+
+    func setCoins(tiles:[Coin]) {
+        coinTiles = tiles
+    }
+
+    func setLevelHandler(handler:LevelHandler) {
+        levelHandler = handler
     }
     
 }
