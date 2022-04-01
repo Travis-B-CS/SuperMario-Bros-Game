@@ -71,6 +71,7 @@ class QuestionBlockTile : RenderableEntity {
 
     func setTopLeft(point : Point) {
         topLeft = point
+        rect = Rect(topLeft:topLeft, size:Size(width:96, height:96))
     }
     
 }
