@@ -1,3 +1,4 @@
+
 import Igis
 import Scenes
 import Foundation
@@ -99,7 +100,51 @@ class LevelHandler : RenderableEntity {
     }
 
     func levelTwo(canvasSize: Size) {
-        print("level 2")
+        if let interactionLayer = interactionLayer {
+            let questionTile = QuestionBlockTile(whatInside:"coin")
+            questionTile.setTopLeft(point: Point(x: canvasSize.width / 3, y: canvasSize.height - 200 - 96 - 100))
+            let coin = Coin()
+            coin.setRect(newRect: questionTile.rect)
+            coin.setActive(value: false)
+            
+            questionTile.setInsideCoin(value: coin)
+            questionTile.setLevelHandler(handler: self)
+            
+            let questionTile2 = QuestionBlockTile(whatInside:"coin")
+            questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2 + 100, y: canvasSize.height - 200 - 96 - 100))
+            let coin2 = Coin()
+            coin2.setRect(newRect: questionTile2.rect)
+            coin2.setActive(value: false)
+             
+            questionTile2.setInsideCoin(value: coin2)
+            questionTile2.setLevelHandler(handler: self)
+                        
+            let groundCoin = Coin()
+            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin.setActive(value: true)
+
+            let groundCoin2 = Coin()
+            groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin2.setActive(value: true)
+            
+            let groundCoin3 = Coin()
+            groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 + 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin3.setActive(value: true)
+
+            interactionLayer.renderCoin(coin: groundCoin)
+            interactionLayer.renderCoin(coin: groundCoin2)
+            interactionLayer.renderCoin(coin: groundCoin3)
+            interactionLayer.renderCoin(coin: coin)
+            interactionLayer.renderCoin(coin: coin2)
+            interactionLayer.renderQuestionBlockTile(questionTile: questionTile)
+            interactionLayer.renderQuestionBlockTile(questionTile: questionTile2)
+            
+            marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
+            marioSprite.setBoxes(tiles: [questionTile, questionTile2])
+
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin, questionTile2, coin2])
+        }
+
     }
 
     func levelThree(canvasSize: Size) {
