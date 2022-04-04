@@ -30,6 +30,10 @@ class LevelHandler : RenderableEntity {
                 levelTwo(canvasSize: canvasSize)
             case 3:
                 levelThree(canvasSize: canvasSize)
+            case 4:
+                levelFour(canvasSize: canvasSize)
+            case 5:
+                levelFive(canvasSize: canvasSize)
             default:
                 print("You reached the end!")
             }
@@ -148,26 +152,27 @@ class LevelHandler : RenderableEntity {
     }
 
     func levelThree(canvasSize: Size) {
+        
     }
 
-    func levelFour() {
+    func levelFour(canvasSize: Size) {
     }
 
-    func levelFive() {
+    func levelFive(canvasSize: Size) {
     }
 
-    func levelSix() {
+    func levelSix(canvasSize: Size) {
     }
 
-    func levelSeven() {
+    func levelSeven(canvasSize: Size) {
     }
 
-    func levelEight() {
+    func levelEight(canvasSize: Size) {
     }
 
-    func levelNine() {
+    func levelNine(canvasSize: Size) {
     }
 
-    func levelTen() {
+    func levelTen(canvasSize: Size) {
     }
 }

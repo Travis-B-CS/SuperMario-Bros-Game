@@ -58,9 +58,22 @@ class Mario : RenderableEntity {
             //if we assume hiting from the bottom, the y-cords gotta be equal
             if (topLeft.y <= box.rect.topLeft.y + box.rect.size.height) {
                 // ok now for the x-cords...
+                
                 //the only times when the x-coord doesn't work is if mario's top right is left of the box's top left
                 // or when mario's top left is right of the box's top right
                 if(!(topLeft.x + marioSize.width < box.rect.topLeft.x || topLeft.x > box.rect.topLeft.x + box.rect.size.width )) {
+                    // Need to test if topLeft.y - velocityY is still less than (didnt hit from bottom)
+                    if(topLeft.y - Int(velocityY) < box.rect.topLeft.y + box.rect.size.height) {
+                        // need to see which side it came from so can stop velocityX and reset its position
+                        if(topLeft.x > box.rect.topLeft.x + box.rect.size.width / 2) {
+                            topLeft.x = box.rect.topLeft.x + box.rect.size.width
+                        } else {
+                            topLeft.x = box.rect.topLeft.x - marioSize.width
+                        }
+                        velocityX = 0
+                        continue;
+                    }
+                    
                     // print("TOUCHED BLOCK")
                     box.setActivated(value: true)
                     velocityY = 7.5
