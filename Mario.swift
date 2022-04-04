@@ -6,6 +6,8 @@ class Mario : RenderableEntity {
 
     let mainStance : Image
     let leftStance : Image
+    let jumpRightStance : Image
+    let jumpLeftStance : Image
     var marioSize = Size(width:0, height:0)
     var topLeft = Point(x:0,y:0)
     var cSize : Size = Size(width:0,height:0)
@@ -27,6 +29,8 @@ class Mario : RenderableEntity {
 
         mainStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/mario.png")
         leftStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/leftmario.png")
+        jumpRightStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/marioJump.png")
+        jumpLeftStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/leftMarioJump.png")
 
         super.init(name: "Mario")
     }
@@ -80,31 +84,49 @@ class Mario : RenderableEntity {
     }
 
     override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(mainStance)
-        canvas.setup(leftStance)
+        canvas.setup(mainStance, leftStance, jumpRightStance, jumpLeftStance)
         cSize = canvasSize
     }
 
     var currentStance = "main"
-
+    
     override func render(canvas:Canvas) {
-        if(velocityX > 0 || (velocityX == 0 && currentStance == "main")) {
-            currentStance = "main"
-            marioSize = Size(width:107, height:140)
-            if mainStance.isReady {
-                mainStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
-                canvas.render(mainStance)
+        if(velocityY < 0) {
+            if(velocityX > 0 || (velocityX == 0 && currentStance == "main")) {
+                currentStance = "main"
+                marioSize = Size(width:107, height:140)
+                if jumpRightStance.isReady {
+                    jumpRightStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                    canvas.render(jumpRightStance)
+                }
+            } else if(velocityX < 0 || (velocityX == 0 && currentStance == "leftmain")) {
+                currentStance = "leftmain"
+                marioSize = Size(width:107, height:140)
+                if jumpLeftStance.isReady {
+                    jumpLeftStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                    canvas.render(jumpLeftStance)
+                }
             }
-        } else if(velocityX < 0 || (velocityX == 0 && currentStance == "leftmain")) {
-            currentStance = "leftmain"
-            marioSize = Size(width:107, height:140)
-            if leftStance.isReady {
-                leftStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
-                canvas.render(leftStance)
+        }
+        else {
+            if(velocityX > 0 || (velocityX == 0 && currentStance == "main")) {
+                currentStance = "main"
+                marioSize = Size(width:107, height:140)
+                if mainStance.isReady {
+                    mainStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                    canvas.render(mainStance)
+                }
+            } else if(velocityX < 0 || (velocityX == 0 && currentStance == "leftmain")) {
+                currentStance = "leftmain"
+                marioSize = Size(width:107, height:140)
+                if leftStance.isReady {
+                    leftStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                    canvas.render(leftStance)
+                }
             }
         }
     }
-
+    
     func move(to point:Point) {
         topLeft = point
     }
