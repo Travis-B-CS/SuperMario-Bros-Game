@@ -70,7 +70,6 @@ class Mario : RenderableEntity {
                         } else {
                             topLeft.x = box.rect.topLeft.x - marioSize.width
                         }
-                        velocityX = 0
                         continue;
                     }
                     
