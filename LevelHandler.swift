@@ -18,11 +18,21 @@ class LevelHandler : RenderableEntity {
         marioSprite.setLevelHandler(handler: self)
     }
 
+    func getFourZeroes(x:Int) -> String {
+        var y = String(x)
+        for _ in 0 ..< 4 - String(x).count {
+            y = "0"+y
+        }
+        return y
+    }
+
     override func calculate(canvasSize: Size) {
         if(marioSprite.topLeft.x + marioSprite.marioSize.width > marioSprite.cSize.width + 10) {
             clearLevel()
 
             currentLevel += 1
+            score += 3
+            
             switch(currentLevel) {
             case 1:
                 levelOne(canvasSize: canvasSize)
@@ -41,7 +51,7 @@ class LevelHandler : RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
-        let text = Text(location:Point(x:50, y:90), text:String(score))
+        let text = Text(location:Point(x:50, y:90), text:getFourZeroes(x:score))
         text.font = "30pt Arial"
         canvas.render(text)
     }

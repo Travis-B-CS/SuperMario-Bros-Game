@@ -16,6 +16,14 @@ class Background : RenderableEntity {
     var bounds = Size(width:0,height:0)
     var time : Date
 
+    func getFourZeroes(x:Int) -> String {
+        var y = String(x)
+        for _ in 0 ..< 4 - String(x).count {
+            y = "0"+y
+        }
+        return y
+    }
+    
     func getWidthWithinBounds(x: Int, width: Int) -> Int {
         if(x > bounds.width) {return 0;}
         if(x + width <= bounds.width) {return width;}
@@ -80,7 +88,7 @@ class Background : RenderableEntity {
             text.font = "30pt Arial"
             canvas.render(text)
 
-            text = Text(location:Point(x:bounds.width - 200, y:90), text: String(Int(Date().timeIntervalSince1970 - time.timeIntervalSince1970)))
+            text = Text(location:Point(x:bounds.width - 200, y:90), text: getFourZeroes(x: Int(Date().timeIntervalSince1970 - time.timeIntervalSince1970)))
             text.font = "30pt Arial"
             canvas.render(text)
             
