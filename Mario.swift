@@ -110,7 +110,7 @@ class Mario : RenderableEntity {
             if(box.isDead) {
                 continue;
             }
-            if (topLeft.y <= box.topLeft.y + 96) {
+            if (topLeft.y + marioSize.height >= box.topLeft.y) {
                 if(!(topLeft.x + marioSize.width < box.topLeft.x || topLeft.x > box.topLeft.x + 96 )) {
                     if(topLeft.y - Int(velocityY) + marioSize.height < box.topLeft.y) {
                         // was on top, so killed it
