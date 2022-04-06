@@ -12,7 +12,7 @@ class Goomba : RenderableEntity {
     var isDead = false
     var isSquished = false
     var squishedTime = 0
-    var animationTime = 0;
+    var animationFrame = 0;
 
     init() {
         func getImage(url:String) -> Image { // A function for getting Images
@@ -30,7 +30,7 @@ class Goomba : RenderableEntity {
     }
 
     override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(goombaImage)
+        canvas.setup(goombaLeft, goombaRight, goombaSquished)
     }
 
     override func calculate(canvasSize: Size) {
@@ -41,7 +41,7 @@ class Goomba : RenderableEntity {
         if(isSquished == true) {
             squishedTime += 1
 
-            if(squishedTime > 10) {
+            if(squishedTime > 20) {
                 isDead = true
             }
             return;
@@ -49,7 +49,7 @@ class Goomba : RenderableEntity {
 
         animationFrame += 1
 
-        if(animationFrame >= 10) {
+        if(animationFrame >= 20) {
             animationFrame = 0
         }
     }
@@ -59,20 +59,20 @@ class Goomba : RenderableEntity {
 
         if(isSquished == true) {
             if(goombaSquished.isReady) {
-                goombaSquished.renderMode = .desinationRect(Rect(topLeft:topLeft, size:Size(width: 92, height: 92)))
+                goombaSquished.renderMode = .destinationRect(Rect(topLeft:topLeft, size:Size(width: 92, height: 92)))
                 canvas.render(goombaSquished)
             }
             return;
         }
         
-        if(animationFrame / 5 == 0) {
+        if(animationFrame / 10 == 0) {
             if(goombaLeft.isReady) {
-                goombaLeft.renderMode = .desinationRect(Rect(topLeft:topLeft, size:Size(width: 92, height: 92)))
+                goombaLeft.renderMode = .destinationRect(Rect(topLeft:topLeft, size:Size(width: 92, height: 92)))
                 canvas.render(goombaLeft)
             }
         } else {
             if(goombaRight.isReady) {
-                goombaRight.renderMode = .desinationRect(Rect(topLeft:topLeft, size:Size(width: 92, height: 92)))
+                goombaRight.renderMode = .destinationRect(Rect(topLeft:topLeft, size:Size(width: 92, height: 92)))
                 canvas.render(goombaRight)
             }
         }

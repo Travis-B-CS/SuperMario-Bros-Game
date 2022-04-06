@@ -15,6 +15,7 @@ class Mario : RenderableEntity {
     var velocityY = 0.0
     var questionTiles : [QuestionBlockTile] = []
     var coinTiles : [Coin] = []
+    var goombas : [Goomba] = []
     var levelHandler : LevelHandler?
     
     init(tiles:[QuestionBlockTile]) {
@@ -163,6 +164,10 @@ class Mario : RenderableEntity {
 
     func setCoins(tiles:[Coin]) {
         coinTiles = tiles
+    }
+
+    func setGoombas(tiles:[Goomba]) {
+        goombas = tiles
     }
 
     func setLevelHandler(handler:LevelHandler) {

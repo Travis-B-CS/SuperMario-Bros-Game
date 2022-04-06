@@ -1,4 +1,3 @@
-
 import Igis
 import Scenes
 import Foundation
@@ -70,6 +69,7 @@ class LevelHandler : RenderableEntity {
                 interactionLayer.removeEntity(entity:entity)
             }
         }
+        marioSprite.setGoombas(tiles: [])
         marioSprite.setBoxes(tiles: [])
         marioSprite.setCoins(tiles: [])
         activeEntities = []
@@ -145,6 +145,10 @@ class LevelHandler : RenderableEntity {
             groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 + 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
             groundCoin3.setActive(value: true)
 
+            let goomba = Goomba()
+            goomba.setTopLeft(value: Point(x: canvasSize.width / 2 + 300, y: canvasSize.height - 96 - 96 - 30))
+
+            interactionLayer.renderGoomba(goomba: goomba)
             interactionLayer.renderCoin(coin: groundCoin)
             interactionLayer.renderCoin(coin: groundCoin2)
             interactionLayer.renderCoin(coin: groundCoin3)
@@ -155,8 +159,9 @@ class LevelHandler : RenderableEntity {
             
             marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
             marioSprite.setBoxes(tiles: [questionTile, questionTile2])
+            marioSprite.setGoombas(tiles: [goomba])
 
-            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin, questionTile2, coin2])
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin, questionTile2, coin2, goomba])
         }
 
     }

@@ -94,6 +94,10 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
         insert(entity:coin, at:.behind(object:marioSprite))
     }
 
+    func renderGoomba(goomba:Goomba) {
+        insert(entity:goomba, at:.front)
+    }
+
     func removeEntity(entity:RenderableEntity) {
         remove(entity:entity)
     }
