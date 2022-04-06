@@ -15,6 +15,13 @@ class Mario : RenderableEntity {
     let walkLeft2 : Image
     let walkLeft3 : Image
     var walkingAnimationFrame = 0
+
+    let marioDieSound : Audio
+    var shouldRenderMarioDieSound = false
+    let jumpSound : Audio
+    var shouldRenderJumpSound = false
+    let stompSound : Audio
+    var shouldRenderStompSound = false
     
     var marioSize = Size(width:0, height:0)
     var topLeft = Point(x:0,y:0)
@@ -37,6 +44,13 @@ class Mario : RenderableEntity {
             return Image(sourceURL:url)
         }
 
+        func getAudio(url:String, loop:Bool) -> Audio { // function for getting audio
+            guard let url = URL(string:url) else {
+                fatalError("Failed to create URL for "+url)
+            }
+            return Audio(sourceURL: url, shouldLoop:loop)
+        }
+
         questionTiles = tiles
 
         mainStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/mainStance.png")
@@ -50,15 +64,25 @@ class Mario : RenderableEntity {
         walkLeft2 = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/walkLeft2.png")
         walkLeft3 = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/walkLeft3.png")
 
+        marioDieSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_mariodie.wav", loop: false)
+        jumpSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_jump-small.wav", loop: false)
+        stompSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_stomp.wav", loop: false)
+
         super.init(name: "Mario")
     }
-
+    
+    override func setup(canvasSize:Size, canvas:Canvas) {
+        canvas.setup(mainStance, leftStance, jumpRightStance, jumpLeftStance, walkRight1, walkLeft1, walkRight2, walkLeft2, walkRight3, walkLeft3, marioDieSound, jumpSound, stompSound)
+        cSize = canvasSize
+    }
+    
     override func calculate(canvasSize: Size) {        
         topLeft.x += Int(velocityX)
         topLeft.y += Int(velocityY)
 
         if(topLeft.y + marioSize.height >= canvasSize.height - 96 - 20) {
             topLeft.y = canvasSize.height - 96 - marioSize.height - 20
+            velocityY = 0.0
         } else {
             velocityY += 1.0
         }
@@ -116,11 +140,13 @@ class Mario : RenderableEntity {
                         // was on top, so killed it
                         velocityY = -10
                         box.setSquished(value: true)
+                        shouldRenderStompSound = true
                         return;
                     }
 
                     // mario died
                     topLeft.x = 20
+                    shouldRenderMarioDieSound = true
                 }
             }
         }
@@ -139,17 +165,27 @@ class Mario : RenderableEntity {
         }
     }
 
-    override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(mainStance, leftStance, jumpRightStance, jumpLeftStance, walkRight1, walkLeft1, walkRight2, walkLeft2, walkRight3, walkLeft3)
-        cSize = canvasSize
-    }
-
     var currentStance = "right"
     
     override func render(canvas:Canvas) {
         marioSize = Size(width:107, height:140)
+
+        if shouldRenderStompSound && stompSound.isReady {
+            shouldRenderStompSound = false
+            canvas.render(stompSound)
+        }
+
+        if shouldRenderMarioDieSound && marioDieSound.isReady {
+            shouldRenderMarioDieSound = false
+            canvas.render(marioDieSound)
+        }
+
+        if shouldRenderJumpSound && jumpSound.isReady {
+            shouldRenderJumpSound = false
+            canvas.render(jumpSound)
+        }
         
-        if(velocityY < 0) {
+        if(velocityY != 0) {
             if(velocityX > 0 || (velocityX == 0 && currentStance == "right")) {
                 currentStance = "right"
                 marioSize = Size(width:107, height:140)
@@ -239,6 +275,7 @@ class Mario : RenderableEntity {
     func jump() {
         if(topLeft.y + marioSize.height >= cSize.height - 96 - 30) {
             velocityY = -15.0
+            shouldRenderJumpSound = true
         }
     }
 

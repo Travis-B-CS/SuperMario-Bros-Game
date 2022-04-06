@@ -8,8 +8,20 @@ class LevelHandler : RenderableEntity {
     var interactionLayer : InteractionLayer?
     var score = 0
     var activeEntities : [RenderableEntity] = [];
+
+    let stageClearSound : Audio
+    var shouldRenderStageClear = false
     
     init(mario:Mario) {
+        func getAudio(url:String, loop:Bool) -> Audio { // function for getting audio
+            guard let url = URL(string:url) else {
+                fatalError("Failed to create URL for "+url)
+            }
+            return Audio(sourceURL: url, shouldLoop:loop)
+        }
+
+        stageClearSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_stage_clear.wav", loop:false)
+
         marioSprite = mario
 
         super.init(name: "LevelHandler")
@@ -25,8 +37,13 @@ class LevelHandler : RenderableEntity {
         return y
     }
 
+    override func setup(canvasSize:Size, canvas:Canvas) {
+        canvas.setup(stageClearSound)
+    }
+
     override func calculate(canvasSize: Size) {
         if(marioSprite.topLeft.x + marioSprite.marioSize.width > marioSprite.cSize.width + 10) {
+            shouldRenderStageClear = true
             clearLevel()
 
             currentLevel += 1
@@ -50,6 +67,11 @@ class LevelHandler : RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
+        if shouldRenderStageClear && stageClearSound.isReady {
+            canvas.render(stageClearSound)
+            shouldRenderStageClear = false
+        }
+        
         let text = Text(location:Point(x:50, y:90), text:getFourZeroes(x:score))
         text.font = "30pt Arial"
         canvas.render(text)
@@ -83,7 +105,6 @@ class LevelHandler : RenderableEntity {
             questionTile.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
             let coin = Coin()
             coin.setRect(newRect: questionTile.rect)
-            coin.setActive(value: false)
             
             questionTile.setInsideCoin(value: coin)
             questionTile.setLevelHandler(handler: self)
@@ -119,7 +140,6 @@ class LevelHandler : RenderableEntity {
             questionTile.setTopLeft(point: Point(x: canvasSize.width / 3, y: canvasSize.height - 200 - 96 - 100))
             let coin = Coin()
             coin.setRect(newRect: questionTile.rect)
-            coin.setActive(value: false)
             
             questionTile.setInsideCoin(value: coin)
             questionTile.setLevelHandler(handler: self)
@@ -128,7 +148,6 @@ class LevelHandler : RenderableEntity {
             questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2 + 100, y: canvasSize.height - 200 - 96 - 100))
             let coin2 = Coin()
             coin2.setRect(newRect: questionTile2.rect)
-            coin2.setActive(value: false)
              
             questionTile2.setInsideCoin(value: coin2)
             questionTile2.setLevelHandler(handler: self)

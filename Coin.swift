@@ -10,11 +10,22 @@ class Coin : RenderableEntity {
     let coinSideways : Image
     let coinMoreTurnedRight : Image
     let coinSlightlyTurnedRight : Image
+
+    let coinSound : Audio
+    var shouldRenderCoinSound = false
+    
     var isActive = false
     var currentAnimationFrameCount = 0
     var rect = Rect(topLeft:Point(x:0,y:0), size:Size(width:0,height:0))
 
     init() {
+        func getAudio(url:String, loop:Bool) -> Audio { // function for getting audio
+            guard let url = URL(string:url) else {
+                fatalError("Failed to create URL for "+url)
+            }
+            return Audio(sourceURL: url, shouldLoop:loop)
+        }
+        
         func getImage(url:String) -> Image { // A function for getting Images
             guard let url = URL(string:url) else {
                 fatalError("Failed to create URL for "+url)
@@ -28,11 +39,13 @@ class Coin : RenderableEntity {
         coinSideways = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/coinSideways.png")
         coinMoreTurnedRight = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/coinMoreTurnedRight.png")
         coinSlightlyTurnedRight = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/coinSlightlyTurnedRight.png")
+
+        coinSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_coin.wav", loop:false)
     }
 
     // Setup images
     override func setup(canvasSize: Size, canvas: Canvas) {
-        canvas.setup(coinMain, coinSlightlyTurnedLeft, coinMoreTurnedLeft, coinSideways, coinMoreTurnedRight, coinSlightlyTurnedRight)
+        canvas.setup(coinMain, coinSlightlyTurnedLeft, coinMoreTurnedLeft, coinSideways, coinMoreTurnedRight, coinSlightlyTurnedRight, coinSound)
     }
 
     override func calculate(canvasSize: Size) {
@@ -44,6 +57,9 @@ class Coin : RenderableEntity {
 
     func setActive(value: Bool) {
         isActive = value
+        if(value == false) {
+            shouldRenderCoinSound = true
+        }
     }
 
     func setRect(newRect: Rect) {
@@ -51,6 +67,11 @@ class Coin : RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
+        if(shouldRenderCoinSound && coinSound.isReady) {
+            canvas.render(coinSound)
+            shouldRenderCoinSound = false
+        }
+        
         if(isActive) {
             switch(currentAnimationFrameCount / 5) {
             case 0:
