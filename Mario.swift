@@ -154,6 +154,11 @@ class Mario : RenderableEntity {
                         mainStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
                         canvas.render(mainStance)
                     }
+                } else if(currentStance == "left") {
+                    if leftStance.isReady {
+                        leftStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(leftStance)
+                    }
                 }
             }
             if(velocityX > 0) {
