@@ -14,6 +14,8 @@ class Goomba : RenderableEntity {
     var squishedTime = 0
     var animationFrame = 0;
 
+    var velocityX = 0
+
     init() {
         func getImage(url:String) -> Image { // A function for getting Images
             guard let url = URL(string:url) else {
@@ -34,6 +36,18 @@ class Goomba : RenderableEntity {
     }
 
     override func calculate(canvasSize: Size) {
+        topLeft.x += velocityX
+
+        if(topLeft.x + 96 > canvasSize.width - 30) {
+            topLeft.x = canvasSize.width - 30 - 96
+            velocityX = -velocityX
+        }
+
+        if(topLeft.x < 20) {
+            topLeft.x = 20
+            velocityX = -velocityX
+        }
+        
         if(isDead == true) {
             return
         }
@@ -85,6 +99,10 @@ class Goomba : RenderableEntity {
 
     func setSquished(value : Bool) {
         isSquished = value
+    }
+
+    func setVelocityX(value: Int) {
+        velocityX = value
     }
     
 }

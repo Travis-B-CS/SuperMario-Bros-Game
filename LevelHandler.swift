@@ -147,6 +147,7 @@ class LevelHandler : RenderableEntity {
 
             let goomba = Goomba()
             goomba.setTopLeft(value: Point(x: canvasSize.width / 2 + 300, y: canvasSize.height - 96 - 96 - 30))
+            goomba.setVelocityX(value: 2)
 
             interactionLayer.renderGoomba(goomba: goomba)
             interactionLayer.renderCoin(coin: groundCoin)
