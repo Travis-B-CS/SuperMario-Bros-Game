@@ -105,6 +105,25 @@ class Mario : RenderableEntity {
                 }
             }
         }
+
+        for box in goombas {
+            if(box.isDead) {
+                continue;
+            }
+            if (topLeft.y <= box.topLeft.y + 96) {
+                if(!(topLeft.x + marioSize.width < box.topLeft.x || topLeft.x > box.topLeft.x + 96 )) {
+                    if(topLeft.y - Int(velocityY) + marioSize.height < box.topLeft.y) {
+                        // was on top, so killed it
+                        velocityY = -10
+                        box.setSquished(value: true)
+                        return;
+                    }
+
+                    // mario died
+                    topLeft.x = 20
+                }
+            }
+        }
         
         for box in coinTiles {
             if box.isActive {
