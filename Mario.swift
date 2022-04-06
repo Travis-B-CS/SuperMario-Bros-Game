@@ -8,14 +8,25 @@ class Mario : RenderableEntity {
     let leftStance : Image
     let jumpRightStance : Image
     let jumpLeftStance : Image
+    let walkRight1 : Image
+    let walkRight2 : Image
+    let walkRight3 : Image
+    let walkLeft1 : Image
+    let walkLeft2 : Image
+    let walkLeft3 : Image
+    var walkingAnimationFrame = 0
+    
     var marioSize = Size(width:0, height:0)
     var topLeft = Point(x:0,y:0)
     var cSize : Size = Size(width:0,height:0)
+    
     var velocityX = 0.0
     var velocityY = 0.0
+    
     var questionTiles : [QuestionBlockTile] = []
     var coinTiles : [Coin] = []
     var goombas : [Goomba] = []
+    
     var levelHandler : LevelHandler?
     
     init(tiles:[QuestionBlockTile]) {
@@ -28,10 +39,16 @@ class Mario : RenderableEntity {
 
         questionTiles = tiles
 
-        mainStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/mario.png")
-        leftStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/leftmario.png")
-        jumpRightStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/marioJump.png")
-        jumpLeftStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/leftMarioJump.png")
+        mainStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/mainStance.png")
+        leftStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/leftMainStance.png")
+        jumpRightStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/jumpStance.png")
+        jumpLeftStance = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/leftJumpStance.png")
+        walkRight1 = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/walkRight1.png")
+        walkRight2 = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/walkRight2.png")
+        walkRight3 = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/walkRight3.png")
+        walkLeft1 = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/walkLeft1.png")
+        walkLeft2 = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/walkLeft2.png")
+        walkLeft3 = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/walkLeft3.png")
 
         super.init(name: "Mario")
     }
@@ -40,8 +57,8 @@ class Mario : RenderableEntity {
         topLeft.x += Int(velocityX)
         topLeft.y += Int(velocityY)
 
-        if(topLeft.y + marioSize.height >= canvasSize.height - 96 - 30) {
-            topLeft.y = canvasSize.height - 96 - marioSize.height - 30
+        if(topLeft.y + marioSize.height >= canvasSize.height - 96 - 20) {
+            topLeft.y = canvasSize.height - 96 - marioSize.height - 20
         } else {
             velocityY += 1.0
         }
@@ -50,6 +67,13 @@ class Mario : RenderableEntity {
             topLeft.x = 5
             if(velocityX < 0) {
                 velocityX = 0
+            }
+        }
+
+        if(velocityX != 0) {
+            walkingAnimationFrame += 1
+            if(walkingAnimationFrame >= 21) {
+                walkingAnimationFrame = 0
             }
         }
 
@@ -97,23 +121,25 @@ class Mario : RenderableEntity {
     }
 
     override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(mainStance, leftStance, jumpRightStance, jumpLeftStance)
+        canvas.setup(mainStance, leftStance, jumpRightStance, jumpLeftStance, walkRight1, walkLeft1, walkRight2, walkLeft2, walkRight3, walkLeft3)
         cSize = canvasSize
     }
 
-    var currentStance = "main"
+    var currentStance = "right"
     
     override func render(canvas:Canvas) {
+        marioSize = Size(width:107, height:140)
+        
         if(velocityY < 0) {
-            if(velocityX > 0 || (velocityX == 0 && currentStance == "main")) {
-                currentStance = "main"
+            if(velocityX > 0 || (velocityX == 0 && currentStance == "right")) {
+                currentStance = "right"
                 marioSize = Size(width:107, height:140)
                 if jumpRightStance.isReady {
                     jumpRightStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
                     canvas.render(jumpRightStance)
                 }
-            } else if(velocityX < 0 || (velocityX == 0 && currentStance == "leftmain")) {
-                currentStance = "leftmain"
+            } else if(velocityX < 0 || (velocityX == 0 && currentStance == "left")) {
+                currentStance = "left"
                 marioSize = Size(width:107, height:140)
                 if jumpLeftStance.isReady {
                     jumpLeftStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
@@ -122,19 +148,61 @@ class Mario : RenderableEntity {
             }
         }
         else {
-            if(velocityX > 0 || (velocityX == 0 && currentStance == "main")) {
-                currentStance = "main"
-                marioSize = Size(width:107, height:140)
-                if mainStance.isReady {
-                    mainStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
-                    canvas.render(mainStance)
+            if(velocityX == 0) {
+                if(currentStance == "right") {
+                    if mainStance.isReady {
+                        mainStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(mainStance)
+                    }
                 }
-            } else if(velocityX < 0 || (velocityX == 0 && currentStance == "leftmain")) {
-                currentStance = "leftmain"
-                marioSize = Size(width:107, height:140)
-                if leftStance.isReady {
-                    leftStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
-                    canvas.render(leftStance)
+            }
+            if(velocityX > 0) {
+                currentStance = "right"
+                switch(walkingAnimationFrame / 7) {
+                case 0:
+                    if walkRight1.isReady {
+                        walkRight1.renderMode =  .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(walkRight1)
+                    }
+                case 1:
+                    if walkRight2.isReady {
+                        walkRight2.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(walkRight2)
+                    }
+                case 2:
+                    if walkRight3.isReady {
+                        walkRight3.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(walkRight3)
+                    }
+                default:
+                    if mainStance.isReady {
+                        mainStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(mainStance)
+                    }
+                }
+            } else if(velocityX < 0) {
+                currentStance = "left"
+                switch(walkingAnimationFrame / 7) {
+                case 0:
+                    if walkLeft1.isReady {
+                        walkLeft1.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(walkLeft1)
+                    }
+                case 1:
+                    if walkLeft2.isReady {
+                        walkLeft2.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(walkLeft2)
+                    }
+                case 2:
+                    if walkLeft3.isReady {
+                        walkLeft3.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(walkLeft3)
+                    }
+                default:
+                    if leftStance.isReady {
+                        leftStance.renderMode = .destinationRect(Rect(topLeft:topLeft, size:marioSize))
+                        canvas.render(leftStance)
+                    }
                 }
             }
         }
