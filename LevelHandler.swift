@@ -196,7 +196,7 @@ class LevelHandler : RenderableEntity {
             questionTile.setInsideCoin(value: coin)
             questionTile.setLevelHandler(handler: self)
             
-            let questionTile2 = QuestionBlockTile(whatInside:"don't activate")
+            let questionTile2 = QuestionBlockTile(whatInside:"don't animate")
             questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
             
             questionTile2.setLevelHandler(handler: self)
