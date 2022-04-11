@@ -187,7 +187,67 @@ class LevelHandler : RenderableEntity {
     }
 
     func levelThree(canvasSize: Size) {
-        
+        if let interactionLayer = interactionLayer {
+            let questionTile = QuestionBlockTile(whatInside:"coin")
+            questionTile.setTopLeft(point: Point(x: canvasSize.width / 4, y: canvasSize.height - 200 - 96 - 100))
+            let coin = Coin()
+            coin.setRect(newRect: questionTile.rect)
+            
+            questionTile.setInsideCoin(value: coin)
+            questionTile.setLevelHandler(handler: self)
+            
+            let questionTile2 = QuestionBlockTile(whatInside:"don't activate")
+            questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
+            
+            questionTile2.setLevelHandler(handler: self)
+            questionTile2.setActivated(value: true)
+            
+            let questionTile3 = QuestionBlockTile(whatInside:"coin")
+            questionTile3.setTopLeft(point: Point(x: canvasSize.width / 2 + (canvasSize.width / 4), y: canvasSize.height - 200 - 96 - 100))
+            let coin3 = Coin()
+            coin3.setRect(newRect: questionTile3.rect)
+            
+            questionTile3.setInsideCoin(value: coin3)
+            questionTile3.setLevelHandler(handler: self)
+            
+            let groundCoin = Coin()
+            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 8, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin.setActive(value: true)
+
+            let groundCoin2 = Coin()
+            groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 + 350, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin2.setActive(value: true)
+            
+            let groundCoin3 = Coin()
+            groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 + 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin3.setActive(value: true)
+
+            let goomba = Goomba()
+            goomba.setTopLeft(value: Point(x: canvasSize.width / 2 + 300, y: canvasSize.height - 96 - 96 - 30))
+            goomba.setVelocityX(value: 2)
+            
+            let goomba2 = Goomba()
+            goomba2.setTopLeft(value: Point(x: canvasSize.width / 2 - 300, y: canvasSize.height - 96 - 96 - 30))
+            goomba2.setVelocityX(value: 2)
+            
+            interactionLayer.renderGoomba(goomba: goomba)
+            interactionLayer.renderGoomba(goomba: goomba2)
+            interactionLayer.renderCoin(coin: groundCoin)
+            interactionLayer.renderCoin(coin: groundCoin2)
+            interactionLayer.renderCoin(coin: groundCoin3)
+            interactionLayer.renderCoin(coin: coin)
+            interactionLayer.renderCoin(coin: coin3)
+            interactionLayer.renderQuestionBlockTile(questionTile: questionTile)
+            interactionLayer.renderQuestionBlockTile(questionTile: questionTile2)
+            interactionLayer.renderQuestionBlockTile(questionTile: questionTile3)
+            
+            marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
+            marioSprite.setBoxes(tiles: [questionTile, questionTile2, questionTile3])
+            marioSprite.setGoombas(tiles: [goomba, goomba2])
+
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin, questionTile2, questionTile3, coin3, goomba, goomba2])
+        }
+       
     }
 
     func levelFour(canvasSize: Size) {

@@ -34,6 +34,10 @@ class QuestionBlockTile : RenderableEntity {
     }
     
     override func calculate(canvasSize: Size) {
+        if (inside == "don't animate") {
+            activatedTimer = 10
+            return
+        }
         if(activated == true && activatedTimer < 20) {
             if(inside == "coin") {
                 if let insideCoin = insideCoin {
