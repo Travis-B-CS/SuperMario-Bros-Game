@@ -48,6 +48,10 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
     var keysDown = [String]()
     
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
+        if(levelHandler.lives <= 0) {
+            return;
+        }
+        
         keysDown.append(key)
 //        print("down: "+code)
         if(key == "w" || key == "ArrowUp" || code == "Space") {

@@ -82,14 +82,17 @@ class Background : RenderableEntity {
             
             var text = Text(location:Point(x:50, y:50), text:"MARIO")
             text.font = "30pt Arial"
+            text.alignment = .left
             canvas.render(text)
 
             text = Text(location:Point(x:bounds.width - 200, y:50), text:"TIME")
             text.font = "30pt Arial"
+            text.alignment = .left
             canvas.render(text)
 
             text = Text(location:Point(x:bounds.width - 200, y:90), text: getFourZeroes(x: Int(Date().timeIntervalSince1970 - time.timeIntervalSince1970)))
             text.font = "30pt Arial"
+            text.alignment = .left
             canvas.render(text)
             
             // Render floor:

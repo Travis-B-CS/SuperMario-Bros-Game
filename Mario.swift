@@ -136,7 +136,7 @@ class Mario : RenderableEntity {
             }
             if (topLeft.y + marioSize.height >= box.topLeft.y) {
                 if(!(topLeft.x + marioSize.width < box.topLeft.x || topLeft.x > box.topLeft.x + 96 )) {
-                    if(topLeft.y - Int(velocityY) + marioSize.height < box.topLeft.y) {
+                    if(topLeft.y - Int(velocityY) + marioSize.height - 20 < box.topLeft.y) {
                         // was on top, so killed it
                         velocityY = -10
                         box.setSquished(value: true)
@@ -147,6 +147,9 @@ class Mario : RenderableEntity {
                     // mario died
                     topLeft.x = 20
                     shouldRenderMarioDieSound = true
+                    if let levelHandler = levelHandler {
+                        levelHandler.setLives(value: levelHandler.lives - 1)
+                    }
                 }
             }
         }

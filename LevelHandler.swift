@@ -7,6 +7,7 @@ class LevelHandler : RenderableEntity {
     var currentLevel = 1
     var interactionLayer : InteractionLayer?
     var score = 0
+    var lives = 3
     var activeEntities : [RenderableEntity] = [];
 
     let stageClearSound : Audio
@@ -67,6 +68,18 @@ class LevelHandler : RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
+        if(lives <= 0) {
+            if let canvasSize = canvas.canvasSize {
+                // Render Text:
+                let gameOverText = Text(location:canvasSize.center, text:"GAME OVER!")
+                gameOverText.font = "60pt Arial"
+                gameOverText.alignment = .center
+                canvas.render(gameOverText)
+            }
+
+            clearLevel()
+        }
+        
         if shouldRenderStageClear && stageClearSound.isReady {
             canvas.render(stageClearSound)
             shouldRenderStageClear = false
@@ -74,7 +87,21 @@ class LevelHandler : RenderableEntity {
         
         let text = Text(location:Point(x:50, y:90), text:getFourZeroes(x:score))
         text.font = "30pt Arial"
+        text.alignment = .left
         canvas.render(text)
+
+        if let canvasSize = canvas.canvasSize {
+            
+            let livesHeader = Text(location:Point(x:canvasSize.width / 2, y:45), text:"LIVES")
+            livesHeader.alignment = .center
+            livesHeader.font = "30pt Arial"
+            canvas.render(livesHeader)
+            
+            let livesText = Text(location:Point(x:canvasSize.width / 2, y:90), text:String(lives))
+            livesText.alignment = .center
+            livesText.font = "30pt Arial"
+            canvas.render(livesText)
+        }
     }
 
     func setHandler(handler:InteractionLayer) {
@@ -83,6 +110,10 @@ class LevelHandler : RenderableEntity {
 
     func setScore(value: Int) {
         score = value
+    }
+
+    func setLives(value: Int) {
+        lives = value
     }
 
     func clearLevel() {
@@ -192,15 +223,21 @@ class LevelHandler : RenderableEntity {
             questionTile.setTopLeft(point: Point(x: canvasSize.width / 4, y: canvasSize.height - 200 - 96 - 100))
             let coin = Coin()
             coin.setRect(newRect: questionTile.rect)
-            
             questionTile.setInsideCoin(value: coin)
             questionTile.setLevelHandler(handler: self)
             
+            let tile1 = QuestionBlockTile(whatInside:"don't animate")
+            tile1.setTopLeft(point: Point(x: canvasSize.width / 2 - 96, y: canvasSize.height - 200 - 96 - 100))
+            tile1.setActivated(value: true)
+
             let questionTile2 = QuestionBlockTile(whatInside:"don't animate")
             questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
-            
             questionTile2.setLevelHandler(handler: self)
             questionTile2.setActivated(value: true)
+
+            let tile2 = QuestionBlockTile(whatInside:"don't animate")
+            tile2.setTopLeft(point: Point(x: canvasSize.width / 2 + 96, y: canvasSize.height - 200 - 96 - 100))
+            tile2.setActivated(value: true)
             
             let questionTile3 = QuestionBlockTile(whatInside:"coin")
             questionTile3.setTopLeft(point: Point(x: canvasSize.width / 2 + (canvasSize.width / 4), y: canvasSize.height - 200 - 96 - 100))
@@ -238,14 +275,16 @@ class LevelHandler : RenderableEntity {
             interactionLayer.renderCoin(coin: coin)
             interactionLayer.renderCoin(coin: coin3)
             interactionLayer.renderQuestionBlockTile(questionTile: questionTile)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile1)
             interactionLayer.renderQuestionBlockTile(questionTile: questionTile2)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile2)
             interactionLayer.renderQuestionBlockTile(questionTile: questionTile3)
             
             marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
-            marioSprite.setBoxes(tiles: [questionTile, questionTile2, questionTile3])
+            marioSprite.setBoxes(tiles: [questionTile, tile1, questionTile2, tile2, questionTile3])
             marioSprite.setGoombas(tiles: [goomba, goomba2])
 
-            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin, questionTile2, questionTile3, coin3, goomba, goomba2])
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin, tile1, questionTile2, tile2, questionTile3, coin3, goomba, goomba2])
         }
        
     }
