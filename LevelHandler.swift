@@ -249,8 +249,47 @@ class LevelHandler : RenderableEntity {
         }
        
     }
-
+    
     func levelFour(canvasSize: Size) {
+        if let interactionLayer = interactionLayer {
+            let groundCoin = Coin()
+            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 4, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin.setActive(value: true)
+
+            let groundCoin2 = Coin()
+            groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin2.setActive(value: true)
+            
+            let groundCoin3 = Coin()
+            groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 + (canvasSize.width / 4), y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin3.setActive(value: true)
+
+            let goomba = Goomba()
+            goomba.setTopLeft(value: Point(x: canvasSize.width / 4, y: canvasSize.height - 96 - 96 - 30))
+            goomba.setVelocityX(value: 2)
+            
+            let goomba2 = Goomba()
+            goomba2.setTopLeft(value: Point(x: canvasSize.width / 2, y: canvasSize.height - 96 - 96 - 30))
+            goomba2.setVelocityX(value: 4)
+
+            
+            let goomba3 = Goomba()
+            goomba3.setTopLeft(value: Point(x: canvasSize.width / 2 + (canvasSize.width / 4), y: canvasSize.height - 96 - 96 - 30))
+            goomba3.setVelocityX(value: 2)
+            
+            interactionLayer.renderGoomba(goomba: goomba)
+            interactionLayer.renderGoomba(goomba: goomba2)
+            interactionLayer.renderGoomba(goomba: goomba3)
+            interactionLayer.renderCoin(coin: groundCoin)
+            interactionLayer.renderCoin(coin: groundCoin2)
+            interactionLayer.renderCoin(coin: groundCoin3)
+            
+            marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
+            marioSprite.setGoombas(tiles: [goomba, goomba2, goomba3])
+            
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, goomba, goomba2, goomba3])
+        }
+                
     }
 
     func levelFive(canvasSize: Size) {
