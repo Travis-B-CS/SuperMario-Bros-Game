@@ -310,7 +310,6 @@ class LevelHandler : RenderableEntity {
             let goomba2 = Goomba()
             goomba2.setTopLeft(value: Point(x: canvasSize.width / 2, y: canvasSize.height - 96 - 96 - 30))
             goomba2.setVelocityX(value: 4)
-
             
             let goomba3 = Goomba()
             goomba3.setTopLeft(value: Point(x: canvasSize.width / 2 + (canvasSize.width / 4), y: canvasSize.height - 96 - 96 - 30))
@@ -332,6 +331,51 @@ class LevelHandler : RenderableEntity {
     }
 
     func levelFive(canvasSize: Size) {
+        if let interactionLayer = interactionLayer {
+            let goomba = Goomba()
+            goomba.setTopLeft(value: Point(x: canvasSize.width / 2 - 96, y: canvasSize.height - 96 - 96 - 30))
+            goomba.setVelocityX(value: 2)
+            
+            let goomba2 = Goomba()
+            goomba2.setTopLeft(value: Point(x: canvasSize.width / 2 - (96 * 3), y: canvasSize.height - 96 - 96 - 30))
+            goomba2.setVelocityX(value: 4)
+            
+            let goomba3 = Goomba()
+            goomba3.setTopLeft(value: Point(x: canvasSize.width / 2 - (96 * 5), y: canvasSize.height - 96 - 96 - 30))
+            goomba3.setVelocityX(value: 2)
+            
+            let goomba4 = Goomba()
+            goomba3.setTopLeft(value: Point(x: canvasSize.width / 2 - (96 * 7), y: canvasSize.height - 96 - 96 - 30))
+            goomba3.setVelocityX(value: 3)
+            
+            let goomba5 = Goomba()
+            goomba5.setTopLeft(value: Point(x: canvasSize.width / 2 + 96, y: canvasSize.height - 96 - 96 - 30))
+            goomba5.setVelocityX(value: 2)
+            
+            let goomba6 = Goomba()
+            goomba6.setTopLeft(value: Point(x: canvasSize.width / 2 + (96 * 3), y: canvasSize.height - 96 - 96 - 30))
+            goomba6.setVelocityX(value: 4)
+            
+            let goomba7 = Goomba()
+            goomba7.setTopLeft(value: Point(x: canvasSize.width / 2 + (96 * 5), y: canvasSize.height - 96 - 96 - 30))
+            goomba7.setVelocityX(value: 2)
+            
+            let goomba8 = Goomba()
+            goomba8.setTopLeft(value: Point(x: canvasSize.width / 2 + (96 * 7), y: canvasSize.height - 96 - 96 - 30))
+            goomba8.setVelocityX(value: 3)
+            
+            interactionLayer.renderGoomba(goomba: goomba)
+            interactionLayer.renderGoomba(goomba: goomba2)
+            interactionLayer.renderGoomba(goomba: goomba3)
+            interactionLayer.renderGoomba(goomba: goomba4)
+            interactionLayer.renderGoomba(goomba: goomba5)
+            interactionLayer.renderGoomba(goomba: goomba6)
+            interactionLayer.renderGoomba(goomba: goomba7)
+            interactionLayer.renderGoomba(goomba: goomba8)
+            
+            marioSprite.setGoombas(tiles: [goomba, goomba2, goomba3, goomba4, goomba5, goomba6, goomba7, goomba8])
+            activeEntities.append(contentsOf:[goomba, goomba2, goomba3, goomba4, goomba5, goomba6, goomba7, goomba8])
+        }
     }
 
     func levelSix(canvasSize: Size) {
