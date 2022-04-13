@@ -1,7 +1,7 @@
 import Igis
 import Scenes
 import Foundation
-//Random Comment
+
 class LevelHandler : RenderableEntity {
     let marioSprite : Mario
     var currentLevel = 1
