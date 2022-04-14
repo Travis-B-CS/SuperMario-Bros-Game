@@ -104,28 +104,28 @@ class LevelHandler : RenderableEntity {
             if mushroomImage.isReady {               
                 for _ in 0 ..< lives {
                     if lives == 3 {
-                        let shroomDestinationRectLeft = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48 - 15 - 96), y: 15), size:Size(width:96, height:96))
+                        let shroomDestinationRectLeft = Rect(topLeft:Point(x: (canvasSize.width / 2 - 30 - 15 - 60), y: 15), size:Size(width:60, height:60))
                         mushroomImage.renderMode = .destinationRect(shroomDestinationRectLeft)
                         canvas.render(mushroomImage)
                                                 
-                        let shroomDestinationRectCentered = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48), y: 15), size:Size(width: 96, height:96))
+                        let shroomDestinationRectCentered = Rect(topLeft:Point(x: (canvasSize.width / 2 - 30), y: 15), size:Size(width: 60, height:60))
                         mushroomImage.renderMode = .destinationRect(shroomDestinationRectCentered)
                         canvas.render(mushroomImage)
 
-                        let shroomDestinationRectRight = Rect(topLeft:Point(x: (canvasSize.width / 2 + 48 + 15), y: 15), size:Size(width:96, height:96))
+                        let shroomDestinationRectRight = Rect(topLeft:Point(x: (canvasSize.width / 2 + 30 + 15), y: 15), size:Size(width:60, height:60))
                         mushroomImage.renderMode = .destinationRect(shroomDestinationRectRight)
                         canvas.render(mushroomImage)
                     } else if lives == 2 {
-                        let shroomDestinationRectLeft = Rect(topLeft:Point(x: (canvasSize.width / 2 - 96 - 15), y: 15), size:Size(width:96, height:96))
+                        let shroomDestinationRectLeft = Rect(topLeft:Point(x: (canvasSize.width / 2 - 60 - 15), y: 15), size:Size(width:60, height:60))
                         mushroomImage.renderMode = .destinationRect(shroomDestinationRectLeft)
                         canvas.render(mushroomImage)
 
-                        let shroomDestinationRectRight = Rect(topLeft:Point(x: (canvasSize.width / 2 + 15), y: 15), size:Size(width:96, height:96))
+                        let shroomDestinationRectRight = Rect(topLeft:Point(x: (canvasSize.width / 2 + 15), y: 15), size:Size(width:60, height:60))
                         mushroomImage.renderMode = .destinationRect(shroomDestinationRectRight)
                         canvas.render(mushroomImage)
                         
                     } else if lives == 1 {
-                        let shroomDestinationRectCentered = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48), y: 15), size:Size(width: 96, height:96))
+                        let shroomDestinationRectCentered = Rect(topLeft:Point(x: (canvasSize.width / 2 - 30), y: 15), size:Size(width: 60, height:60))
                         mushroomImage.renderMode = .destinationRect(shroomDestinationRectCentered)
                         canvas.render(mushroomImage)
                     } else {
