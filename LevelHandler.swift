@@ -13,9 +13,7 @@ class LevelHandler : RenderableEntity {
     let stageClearSound : Audio
     var shouldRenderStageClear = false
     
-    let mushroomImageCentered : Image
-    let mushroomImageLeft : Image
-    let mushroomImageRight : Image
+    let mushroomImage : Image
     
     init(mario:Mario) {
         func getAudio(url:String, loop:Bool) -> Audio { // function for getting audio
@@ -35,10 +33,7 @@ class LevelHandler : RenderableEntity {
         stageClearSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_stage_clear.wav", loop:false)
         
         
-        mushroomImageCentered = getImage(url: "https://www.codermerlin.com/users/travis-beach/www/mushroom.jpeg")
-        mushroomImageLeft = getImage(url: "https://www.codermerlin.com/users/travis-beach/www/mushroom.jpeg")
-        mushroomImageRight = getImage(url: "https://www.codermerlin.com/users/travis-beach/www/mushroom.jpeg")
-        
+        mushroomImage = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/mushroom.png")
         
         marioSprite = mario
         
@@ -56,7 +51,7 @@ class LevelHandler : RenderableEntity {
     }
     
     override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(stageClearSound, mushroomImageCentered, mushroomImageRight, mushroomImageLeft)
+        canvas.setup(stageClearSound, mushroomImage)
     }
     
     override func calculate(canvasSize: Size) {
@@ -93,8 +88,6 @@ class LevelHandler : RenderableEntity {
                 gameOverText.alignment = .center
                 canvas.render(gameOverText)
             }
-            
-            clearLevel()
         }
         
         if shouldRenderStageClear && stageClearSound.isReady {
@@ -108,7 +101,7 @@ class LevelHandler : RenderableEntity {
         canvas.render(text)
         
         if let canvasSize = canvas.canvasSize {
-            if mushroomImageCentered.isReady && mushroomImageLeft.isReady && mushroomImageRight.isReady {
+            if mushroomImage.isReady {
                 let livesHeader = Text(location:Point(x:canvasSize.width / 2, y:45), text:"LIVES")
                 livesHeader.alignment = .center
                 livesHeader.font = "30pt Arial"
@@ -121,12 +114,13 @@ class LevelHandler : RenderableEntity {
                 
                 // Render mushroom
                 for _ in 0 ..< lives {
-                    let shroomSourceRect = Rect(topLeft:Point(x:0, y:0), size:Size(width: 96, height: 96))
                     if lives == 3 {
-                                            let shroomDestinationRectCentered = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48), y: 96), size:Size(width: 96, height:96))
-                                            let shroomDestinationRectLeft = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48 - 15 - 96), y: 96), size:Size(width:96, height:96))
-                    let shroomDestinationRectRight = Rect(topLeft:Point(x: (canvasSize.width / 2 + 48 + 15), y: 96), size:Size(width:96, height:96))
-                        mushroomImageCentered.renderMode = .sourceAndDestination(sourceRect:shroomSourceRect, destinationRect:shroomDestinationRectCentered)
+                        let shroomDestinationRectCentered = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48), y: 96), size:Size(width: 96, height:96))
+                        let shroomDestinationRectLeft = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48 - 15 - 96), y: 96), size:Size(width:96, height:96))
+                        mushroomImage.renderMode = .sourceAndDestination(sourceRect:shroomSourceRect, destinationRect:shroomDestinationRectCentered)
+                        canvas.render(mushroomImage)
+                        let shroomDestinationRectRight = Rect(topLeft:Point(x: (canvasSize.width / 2 + 48 + 15), y: 96), size:Size(width:96, height:96))
+            
                         mushroomImageLeft.renderMode = .sourceAndDestination(sourceRect:shroomSourceRect, destinationRect:shroomDestinationRectLeft)
                         mushroomImageRight.renderMode = .sourceAndDestination(sourceRect:shroomSourceRect, destinationRect:shroomDestinationRectRight)
                         canvas.render(mushroomImageCentered, mushroomImageLeft, mushroomImageRight)
@@ -146,6 +140,9 @@ class LevelHandler : RenderableEntity {
         
         func setLives(value: Int) {
             lives = value
+            if(lives <= 0 ) {
+                clearLevel()
+            }
         }
         
         func clearLevel() {
