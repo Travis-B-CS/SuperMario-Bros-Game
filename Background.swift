@@ -8,14 +8,14 @@ import Igis
 
 
 class Background : RenderableEntity {
-
+    
     let floorImage : Image
     let backgroundFill : FillStyle = FillStyle(color:Color(red: 160, green: 161, blue: 254))
     var background : Rectangle
     var didGetInfo = false
     var bounds = Size(width:0,height:0)
     var time : Date
-
+    
     func getFourZeroes(x:Int) -> String {
         var y = String(x)
         for _ in 0 ..< 4 - String(x).count {
@@ -29,13 +29,14 @@ class Background : RenderableEntity {
         if(x + width <= bounds.width) {return width;}
         return width - ((x + width) - bounds.width);
     }
-
+    
     func getHeightWithinBounds(y: Int, height: Int) -> Int {
         if(y > bounds.height) {return 0;}
         if(y + height <= bounds.height) {return height;}
         return height - ((y + height) - bounds.height);
     }
-
+    
+      
     init() {
 
         func getImage(url:String) -> Image { // A function for getting Images
@@ -44,27 +45,27 @@ class Background : RenderableEntity {
             }
             return Image(sourceURL:url)
         }
-
+        
         floorImage = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/floorTile.png")
-
+        
         background = Rectangle(rect:Rect(topLeft:Point(x:0,y:0), size:Size(width:Int.max,height:Int.max)), fillMode:.fill)
-
+        
         time = Date()
         
         // Using a meaningful name can be helpful for debugging
         super.init(name:"Background")
     }
-
+    
     override func setup(canvasSize:Size, canvas:Canvas) {
         canvas.setup(floorImage)
     }
-
+    
     let floorTileSize = 96
 
-    override func render(canvas:Canvas) {
+    override func render(canvas:Canvas) {            
         if let canvasSize = canvas.canvasSize, !didGetInfo {
             didGetInfo = true
-
+            
             bounds = Size(width:canvasSize.width - 10, height: canvasSize.height - 30)
             
             background = Rectangle(rect:Rect(topLeft:Point(x:0,y:0), size:bounds), fillMode:.fill)
@@ -84,7 +85,7 @@ class Background : RenderableEntity {
             text.font = "30pt Arial"
             text.alignment = .left
             canvas.render(text)
-
+            
             text = Text(location:Point(x:bounds.width - 200, y:50), text:"TIME")
             text.font = "30pt Arial"
             text.alignment = .left
@@ -107,7 +108,7 @@ class Background : RenderableEntity {
                 }
             }
             
+            
         }
     }
-      
 }

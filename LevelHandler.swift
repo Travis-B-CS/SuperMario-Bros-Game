@@ -9,9 +9,13 @@ class LevelHandler : RenderableEntity {
     var score = 0
     var lives = 3
     var activeEntities : [RenderableEntity] = [];
-
+    
     let stageClearSound : Audio
     var shouldRenderStageClear = false
+    
+    let mushroomImageCentered : Image
+    let mushroomImageLeft : Image
+    let mushroomImageRight : Image
     
     init(mario:Mario) {
         func getAudio(url:String, loop:Bool) -> Audio { // function for getting audio
@@ -20,16 +24,29 @@ class LevelHandler : RenderableEntity {
             }
             return Audio(sourceURL: url, shouldLoop:loop)
         }
-
+        
+        func getImage(url:String) -> Image { // A function for getting Images
+            guard let url = URL(string:url) else {
+                fatalError("Failed to create URL for "+url)
+            }
+            return Image(sourceURL:url)
+        }
+        
         stageClearSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_stage_clear.wav", loop:false)
-
+        
+        
+        mushroomImageCentered = getImage(url: "https://www.codermerlin.com/users/travis-beach/www/mushroom.jpeg")
+        mushroomImageLeft = getImage(url: "https://www.codermerlin.com/users/travis-beach/www/mushroom.jpeg")
+        mushroomImageRight = getImage(url: "https://www.codermerlin.com/users/travis-beach/www/mushroom.jpeg")
+        
+        
         marioSprite = mario
-
+        
         super.init(name: "LevelHandler")
-
+        
         marioSprite.setLevelHandler(handler: self)
     }
-
+    
     func getFourZeroes(x:Int) -> String {
         var y = String(x)
         for _ in 0 ..< 4 - String(x).count {
@@ -37,16 +54,16 @@ class LevelHandler : RenderableEntity {
         }
         return y
     }
-
+    
     override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(stageClearSound)
+        canvas.setup(stageClearSound, mushroomImageCentered, mushroomImageRight, mushroomImageLeft)
     }
-
+    
     override func calculate(canvasSize: Size) {
         if(marioSprite.topLeft.x + marioSprite.marioSize.width > marioSprite.cSize.width + 10) {
             shouldRenderStageClear = true
             clearLevel()
-
+            
             currentLevel += 1
             score += 3
             
@@ -66,7 +83,7 @@ class LevelHandler : RenderableEntity {
             }
         }
     }
-
+    
     override func render(canvas: Canvas) {
         if(lives <= 0) {
             if let canvasSize = canvas.canvasSize {
@@ -76,7 +93,7 @@ class LevelHandler : RenderableEntity {
                 gameOverText.alignment = .center
                 canvas.render(gameOverText)
             }
-
+            
             clearLevel()
         }
         
@@ -89,55 +106,70 @@ class LevelHandler : RenderableEntity {
         text.font = "30pt Arial"
         text.alignment = .left
         canvas.render(text)
-
+        
         if let canvasSize = canvas.canvasSize {
-            
-            let livesHeader = Text(location:Point(x:canvasSize.width / 2, y:45), text:"LIVES")
-            livesHeader.alignment = .center
-            livesHeader.font = "30pt Arial"
-            canvas.render(livesHeader)
-            
-            let livesText = Text(location:Point(x:canvasSize.width / 2, y:90), text:String(lives))
-            livesText.alignment = .center
-            livesText.font = "30pt Arial"
-            canvas.render(livesText)
-        }
-    }
-
-    func setHandler(handler:InteractionLayer) {
-        interactionLayer = handler;
-    }
-
-    func setScore(value: Int) {
-        score = value
-    }
-
-    func setLives(value: Int) {
-        lives = value
-    }
-
-    func clearLevel() {
-        for entity in activeEntities {
-            if let interactionLayer = interactionLayer {                
-                interactionLayer.removeEntity(entity:entity)
+            if mushroomImageCentered.isReady && mushroomImageLeft.isReady && mushroomImageRight.isReady {
+                let livesHeader = Text(location:Point(x:canvasSize.width / 2, y:45), text:"LIVES")
+                livesHeader.alignment = .center
+                livesHeader.font = "30pt Arial"
+                canvas.render(livesHeader)
+                
+                let livesText = Text(location:Point(x:canvasSize.width / 2, y:90), text:String(lives))
+                livesText.alignment = .center
+                livesText.font = "30pt Arial"
+                canvas.render(livesText)
+                
+                // Render mushroom
+                for _ in 0 ..< lives {
+                    let shroomSourceRect = Rect(topLeft:Point(x:0, y:0), size:Size(width: 96, height: 96))
+                    if lives == 3 {
+                                            let shroomDestinationRectCentered = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48), y: 96), size:Size(width: 96, height:96))
+                                            let shroomDestinationRectLeft = Rect(topLeft:Point(x: (canvasSize.width / 2 - 48 - 15 - 96), y: 96), size:Size(width:96, height:96))
+                    let shroomDestinationRectRight = Rect(topLeft:Point(x: (canvasSize.width / 2 + 48 + 15), y: 96), size:Size(width:96, height:96))
+                        mushroomImageCentered.renderMode = .sourceAndDestination(sourceRect:shroomSourceRect, destinationRect:shroomDestinationRectCentered)
+                        mushroomImageLeft.renderMode = .sourceAndDestination(sourceRect:shroomSourceRect, destinationRect:shroomDestinationRectLeft)
+                        mushroomImageRight.renderMode = .sourceAndDestination(sourceRect:shroomSourceRect, destinationRect:shroomDestinationRectRight)
+                        canvas.render(mushroomImageCentered, mushroomImageLeft, mushroomImageRight)
+                    }
+                }
+                
             }
         }
-        marioSprite.setGoombas(tiles: [])
-        marioSprite.setBoxes(tiles: [])
-        marioSprite.setCoins(tiles: [])
-        activeEntities = []
-
-        marioSprite.topLeft = Point(x:10, y:marioSprite.topLeft.y)
     }
+        func setHandler(handler:InteractionLayer) {
+            interactionLayer = handler;
+        }
 
-    func levelOne(canvasSize:Size) {
-        if let interactionLayer = interactionLayer {
-            let questionTile = QuestionBlockTile(whatInside:"coin")
-            questionTile.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
-            let coin = Coin()
-            coin.setRect(newRect: questionTile.rect)
-            
-            questionTile.setInsideCoin(value: coin)
+        func setScore(value: Int) {
+            score = value
+        }
+        
+        func setLives(value: Int) {
+            lives = value
+        }
+        
+        func clearLevel() {
+            for entity in activeEntities {
+                if let interactionLayer = interactionLayer {                
+                    interactionLayer.removeEntity(entity:entity)
+                }
+            }
+            marioSprite.setGoombas(tiles: [])
+            marioSprite.setBoxes(tiles: [])
+            marioSprite.setCoins(tiles: [])
+        activeEntities = []
+        
+        marioSprite.topLeft = Point(x:10, y:marioSprite.topLeft.y)
+        }
+        
+        func levelOne(canvasSize:Size) {
+            if let interactionLayer = interactionLayer {
+                let questionTile = QuestionBlockTile(whatInside:"coin")
+                questionTile.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
+                let coin = Coin()
+                coin.setRect(newRect: questionTile.rect)
+                
+                questionTile.setInsideCoin(value: coin)
             questionTile.setLevelHandler(handler: self)
             
             let groundCoin = Coin()
@@ -393,3 +425,4 @@ class LevelHandler : RenderableEntity {
     func levelTen(canvasSize: Size) {
     }
 }
+
