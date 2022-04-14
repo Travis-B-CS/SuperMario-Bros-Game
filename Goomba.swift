@@ -47,6 +47,10 @@ class Goomba : RenderableEntity {
             topLeft.x = 20
             velocityX = -velocityX
         }
+
+        if(topLeft.y == canvasSize.height - 96 - 96 - 30) {
+            topLeft.y = canvasSize.height - 96 - 96 - 25
+        }
         
         if(isDead == true) {
             return
@@ -54,6 +58,11 @@ class Goomba : RenderableEntity {
 
         if(isSquished == true) {
             squishedTime += 1
+
+            if(topLeft.y == canvasSize.height - 96 - 96 - 25) {
+                topLeft.y = canvasSize.height - 96 - 96 - 15
+            }
+                    
 
             if(squishedTime > 20) {
                 isDead = true
