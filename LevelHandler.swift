@@ -8,6 +8,7 @@ class LevelHandler : RenderableEntity {
     var interactionLayer : InteractionLayer?
     var score = 0
     var lives = 3
+    var frozenTimer = 0
     var activeEntities : [RenderableEntity] = [];
     
     let stageClearSound : Audio
@@ -55,6 +56,9 @@ class LevelHandler : RenderableEntity {
     }
     
     override func calculate(canvasSize: Size) {
+        if(frozenTimer > 0) {
+            frozenTimer -= 1
+        }
         if(marioSprite.topLeft.x + marioSprite.marioSize.width > marioSprite.cSize.width + 10) {
             shouldRenderStageClear = true
             clearLevel()
@@ -143,7 +147,22 @@ class LevelHandler : RenderableEntity {
             lives = value
             if(lives <= 0 ) {
                 clearLevel()
+                if let interactionLayer = interactionLayer {
+                    interactionLayer.clearKeysDown()
+                    marioSprite.setVelocityX(new: 0)
+                    marioSprite.setVelocityY(new: 0)
+                }
             }
+        }
+
+        func setFrozenTimer(value: Int) {
+            frozenTimer = value
+            if let interactionLayer = interactionLayer {
+                interactionLayer.clearKeysDown()
+                marioSprite.setVelocityX(new: 0)
+                marioSprite.setVelocityY(new: 0)
+            }
+
         }
         
         func clearLevel() {

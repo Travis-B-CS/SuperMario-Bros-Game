@@ -46,9 +46,13 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
     }
 
     var keysDown = [String]()
+
+    func clearKeysDown() {
+        keysDown.removeAll();
+    }
     
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
-        if(levelHandler.lives <= 0) {
+        if(levelHandler.lives <= 0 || levelHandler.frozenTimer > 0) {
             return;
         }
         

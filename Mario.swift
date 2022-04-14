@@ -148,6 +148,7 @@ class Mario : RenderableEntity {
                     topLeft.x = 20
                     shouldRenderMarioDieSound = true
                     if let levelHandler = levelHandler {
+                        levelHandler.setFrozenTimer(value: 30)
                         levelHandler.setLives(value: levelHandler.lives - 1)
                     }
                 }
