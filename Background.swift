@@ -6,7 +6,7 @@ import Igis
      This class is responsible for rendering the background.
    */
 
-
+//Cloud stuff
 class Background : RenderableEntity {
     
     let floorImage : Image
