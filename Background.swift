@@ -12,6 +12,8 @@ class Background : RenderableEntity {
     let floorImage : Image
     let cloudImage : Image
     let bigCloudImage : Image
+    let bushImage : Image
+    let bigBushImage : Image
     let backgroundFill : FillStyle = FillStyle(color:Color(red: 160, green: 161, blue: 254))
     var background : Rectangle
     var didGetInfo = false
@@ -52,6 +54,9 @@ class Background : RenderableEntity {
         
         cloudImage = getImage(url: "https://www.codermerlin.com/users/travis-beach/mario/cloud.png")
         bigCloudImage = getImage(url: "https://www.codermerlin.com/users/travis-beach/mario/bigCloud.png")
+
+        bushImage = getImage(url: "https://www.codermerlin.com/users/travis-beach/mario/bush.png")
+        bigBushImage = getImage(url: "https://www.codermerlin.com/users/travis-beach/mario/bigBush.png")
         
         background = Rectangle(rect:Rect(topLeft:Point(x:0,y:0), size:Size(width:Int.max,height:Int.max)), fillMode:.fill)
         
@@ -62,7 +67,7 @@ class Background : RenderableEntity {
     }
     
     override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(floorImage, cloudImage, bigCloudImage)
+        canvas.setup(floorImage, cloudImage, bigCloudImage, bushImage, bigBushImage)
     }
     
     let floorTileSize = 96
@@ -134,7 +139,20 @@ class Background : RenderableEntity {
                 let bigCloudDestinationRectC = Rect(topLeft:Point(x: bounds.width / 2, y: bounds.height / 2 - bounds.height / 7), size:Size(width:192, height:96))
                 bigCloudImage.renderMode = .destinationRect(bigCloudDestinationRectC)
                 canvas.render(bigCloudImage)
-            }          
+            }
+            if bushImage.isReady && bigBushImage.isReady {
+                let bushDestinationRect = Rect(topLeft:Point(x:bounds.width / 4, y:bounds.height - 96 - 192), size:Size(width:192, height:192))
+                bushImage.renderMode = .destinationRect(bushDestinationRect)
+                canvas.render(bushImage)
+
+                let bushDestinationRectB = Rect(topLeft:Point(x:bounds.width - bounds.width / 5, y:bounds.height - 96 - 192), size:Size(width:192, height:192))
+                bushImage.renderMode = .destinationRect(bushDestinationRectB)
+                canvas.render(bushImage)
+                
+                let bigBushDestinationRect = Rect(topLeft:Point(x:bounds.width - bounds.width / 2 - 192, y:bounds.height - 96 - 192), size:Size(width:384, height:192))
+                bigBushImage.renderMode = .destinationRect(bigBushDestinationRect)
+                canvas.render(bigBushImage)
+            }
         }
     }
 }
