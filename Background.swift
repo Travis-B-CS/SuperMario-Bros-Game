@@ -6,10 +6,12 @@ import Igis
      This class is responsible for rendering the background.
    */
 
-//Cloud stuff
+
 class Background : RenderableEntity {
     
     let floorImage : Image
+    let cloudImage : Image
+    let bigCloudImage : Image
     let backgroundFill : FillStyle = FillStyle(color:Color(red: 160, green: 161, blue: 254))
     var background : Rectangle
     var didGetInfo = false
@@ -48,6 +50,9 @@ class Background : RenderableEntity {
         
         floorImage = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/floorTile.png")
         
+        cloudImage = getImage(url: "https://www.codermerlin.com/users/travis-beach/mario/cloud.png")
+        bigCloudImage = getImage(url: "https://www.codermerlin.com/users/travis-beach/mario/bigCloud.png")
+        
         background = Rectangle(rect:Rect(topLeft:Point(x:0,y:0), size:Size(width:Int.max,height:Int.max)), fillMode:.fill)
         
         time = Date()
@@ -57,7 +62,7 @@ class Background : RenderableEntity {
     }
     
     override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(floorImage)
+        canvas.setup(floorImage, cloudImage, bigCloudImage)
     }
     
     let floorTileSize = 96
@@ -107,8 +112,29 @@ class Background : RenderableEntity {
                     break
                 }
             }
-            
-            
+
+            if cloudImage.isReady && bigCloudImage.isReady {
+                let cloudDestinationRect = Rect(topLeft:Point(x:bounds.width / 4, y:bounds.height / 5), size:Size(width:96, height:96))
+                cloudImage.renderMode = .destinationRect(cloudDestinationRect)
+                canvas.render(cloudImage)
+                
+                let cloudDestinationRectB = Rect(topLeft:Point(x:bounds.width / 2 + bounds.width / 7, y:bounds.height / 6), size:Size(width:96, height:96))
+                cloudImage.renderMode = .destinationRect(cloudDestinationRectB)
+                canvas.render(cloudImage)
+
+                
+                let bigCloudDestinationRect = Rect(topLeft:Point(x: bounds.width / 2 + bounds.width / 4, y: bounds.height / 4), size:Size(width:192, height:96))
+                bigCloudImage.renderMode = .destinationRect(bigCloudDestinationRect)
+                canvas.render(bigCloudImage)
+
+                let bigCloudDestinationRectB = Rect(topLeft:Point(x: bounds.width / 5 - bounds.width / 6, y: bounds.height / 3), size:Size(width:192, height:96))
+                bigCloudImage.renderMode = .destinationRect(bigCloudDestinationRectB)
+                canvas.render(bigCloudImage)
+
+                let bigCloudDestinationRectC = Rect(topLeft:Point(x: bounds.width / 2, y: bounds.height / 2 - bounds.height / 7), size:Size(width:192, height:96))
+                bigCloudImage.renderMode = .destinationRect(bigCloudDestinationRectC)
+                canvas.render(bigCloudImage)
+            }          
         }
     }
 }
