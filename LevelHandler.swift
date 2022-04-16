@@ -394,8 +394,8 @@ class LevelHandler : RenderableEntity {
             goomba3.setVelocityX(value: 2)
             
             let goomba4 = Goomba()
-            goomba3.setTopLeft(value: Point(x: canvasSize.width / 2 - (96 * 7), y: canvasSize.height - 96 - 96 - 30))
-            goomba3.setVelocityX(value: 3)
+            goomba4.setTopLeft(value: Point(x: canvasSize.width / 2 - (96 * 7), y: canvasSize.height - 96 - 96 - 30))
+            goomba4.setVelocityX(value: 3)
             
             let goomba5 = Goomba()
             goomba5.setTopLeft(value: Point(x: canvasSize.width / 2 + 96, y: canvasSize.height - 96 - 96 - 30))
