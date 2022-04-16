@@ -77,6 +77,8 @@ class LevelHandler : RenderableEntity {
                 levelFour(canvasSize: canvasSize)
             case 5:
                 levelFive(canvasSize: canvasSize)
+            case 6:
+                levelSix(canvasSize: canvasSize)
             default:
                 setLives(value: 0)
             }
@@ -428,6 +430,57 @@ class LevelHandler : RenderableEntity {
     }
 
     func levelSix(canvasSize: Size) {
+        if let interactionLayer = interactionLayer {
+            let groundCoin = Coin()
+            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin.setActive(value: true)
+
+            let groundCoin2 = Coin()
+            groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9 * 2, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin2.setActive(value: true)
+            
+            let groundCoin3 = Coin()
+            groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9 * 3, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin3.setActive(value: true)
+            
+            let groundCoin4 = Coin()
+            groundCoin4.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9 * 4, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin4.setActive(value: true)
+            
+            let groundCoin5 = Coin()
+            groundCoin5.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9 * 5, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin5.setActive(value: true)
+            
+            let groundCoin6 = Coin()
+            groundCoin6.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9 * 6, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin6.setActive(value: true)
+            
+            let groundCoin7 = Coin()
+            groundCoin7.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9 * 7, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin7.setActive(value: true)
+            
+            let groundCoin8 = Coin()
+            groundCoin8.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9 * 8, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin8.setActive(value: true)
+            
+            let groundCoin9 = Coin()
+            groundCoin9.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 9 * 9, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin9.setActive(value: true)
+
+            interactionLayer.renderCoin(coin: groundCoin)
+            interactionLayer.renderCoin(coin: groundCoin2)
+            interactionLayer.renderCoin(coin: groundCoin3)
+            interactionLayer.renderCoin(coin: groundCoin4)
+            interactionLayer.renderCoin(coin: groundCoin5)
+            interactionLayer.renderCoin(coin: groundCoin6)
+            interactionLayer.renderCoin(coin: groundCoin7)
+            interactionLayer.renderCoin(coin: groundCoin8)
+            interactionLayer.renderCoin(coin: groundCoin9)
+            
+            marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3, groundCoin4, groundCoin5, groundCoin6, groundCoin7, groundCoin8, groundCoin9])
+            
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, groundCoin4, groundCoin5, groundCoin6, groundCoin7, groundCoin8, groundCoin9])           
+        }
     }
 
     func levelSeven(canvasSize: Size) {
