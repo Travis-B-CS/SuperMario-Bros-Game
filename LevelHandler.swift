@@ -58,6 +58,11 @@ class LevelHandler : RenderableEntity {
     override func calculate(canvasSize: Size) {
         if(frozenTimer > 0) {
             frozenTimer -= 1
+            if(frozenTimer == 0) {
+                if let interactionLayer = interactionLayer {
+                    interactionLayer.unclearKeysDown()
+                }
+            }
         }
         if(marioSprite.topLeft.x + marioSprite.marioSize.width > marioSprite.cSize.width + 10) {
             shouldRenderStageClear = true
@@ -65,6 +70,7 @@ class LevelHandler : RenderableEntity {
             
             currentLevel += 1
             score += 3
+            setFrozenTimer(value: 30)
             
             switch(currentLevel) {
             case 1:

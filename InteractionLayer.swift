@@ -46,13 +46,35 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
     }
 
     var keysDown = [String]()
+    var frozenKeysDown = [String]()
 
     func clearKeysDown() {
-        keysDown.removeAll();
+        frozenKeysDown = keysDown
+        keysDown.removeAll()
+    }
+
+    func unclearKeysDown() {
+        keysDown = frozenKeysDown
+        frozenKeysDown.removeAll();
+
+        if(keysDown.contains("w") || keysDown.contains("ArrowUp")) {
+            marioSprite.jump()
+        }
+
+        if((keysDown.contains("a") || keysDown.contains("ArrowLeft")) && (keysDown.contains("d") || keysDown.contains("ArrowRight"))) {
+            marioSprite.setVelocityX(new: 0.0)
+        }
+        else if(keysDown.contains("a") || keysDown.contains("ArrowLeft")) {
+            marioSprite.setVelocityX(new: -10.0)
+        }
+        else if(keysDown.contains("d") || keysDown.contains("ArrowRight")) {
+            marioSprite.setVelocityX(new: 10.0)
+        }
     }
     
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         if(levelHandler.lives <= 0 || levelHandler.frozenTimer > 0) {
+            frozenKeysDown.append(key)
             return;
         }
         
@@ -60,9 +82,6 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
 //        print("down: "+code)
         if(key == "w" || key == "ArrowUp" || code == "Space") {
             marioSprite.jump()
-        }
-        if(key == "s" || key == "ArrowDown") {
-            // crouch
         }
 
         if((keysDown.contains("a") || keysDown.contains("ArrowLeft")) && (keysDown.contains("d") || keysDown.contains("ArrowRight"))) {
@@ -77,6 +96,13 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
     }
 
     func onKeyUp(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
+        if(levelHandler.lives <= 0 || levelHandler.frozenTimer > 0) {
+            if(frozenKeysDown.contains(key)) {
+                frozenKeysDown = frozenKeysDown.filter { $0 != key }
+            }
+            return;
+        }
+        
         if (keysDown.contains(key)) {
             keysDown = keysDown.filter { $0 != key }
         }
