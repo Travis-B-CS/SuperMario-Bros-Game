@@ -156,10 +156,13 @@ class LevelHandler : RenderableEntity {
         }
 
         func setScore(value: Int) {
-            score = value
+            score = value          
         }
         
         func setLives(value: Int) {
+            if lives > value {
+                score -= 5
+            }
             lives = value
             if(lives <= 0 ) {
                 clearLevel()
@@ -203,56 +206,56 @@ class LevelHandler : RenderableEntity {
                 coin.setRect(newRect: questionTile.rect)
                 
                 questionTile.setInsideCoin(value: coin)
-            questionTile.setLevelHandler(handler: self)
-            
-            let groundCoin = Coin()
-            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
-            groundCoin.setActive(value: true)
-
-            let groundCoin2 = Coin()
-            groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 400, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
-            groundCoin2.setActive(value: true)
-            
-            let groundCoin3 = Coin()
-            groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 600, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
-            groundCoin3.setActive(value: true)
-
-            interactionLayer.renderCoin(coin: groundCoin)
-            interactionLayer.renderCoin(coin: groundCoin2)
-            interactionLayer.renderCoin(coin: groundCoin3)
-            interactionLayer.renderCoin(coin: coin)
-            interactionLayer.renderQuestionBlockTile(questionTile: questionTile)
-
-            marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
-            marioSprite.setBoxes(tiles: [questionTile])
-
-            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin])
+                questionTile.setLevelHandler(handler: self)
+                
+                let groundCoin = Coin()
+                groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+                groundCoin.setActive(value: true)
+                
+                let groundCoin2 = Coin()
+                groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 400, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+                groundCoin2.setActive(value: true)
+                
+                let groundCoin3 = Coin()
+                groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 600, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+                groundCoin3.setActive(value: true)
+                
+                interactionLayer.renderCoin(coin: groundCoin)
+                interactionLayer.renderCoin(coin: groundCoin2)
+                interactionLayer.renderCoin(coin: groundCoin3)
+                interactionLayer.renderCoin(coin: coin)
+                interactionLayer.renderQuestionBlockTile(questionTile: questionTile)
+                
+                marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
+                marioSprite.setBoxes(tiles: [questionTile])
+                
+                activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin])
+            }
         }
-    }
-
-    func levelTwo(canvasSize: Size) {
-        if let interactionLayer = interactionLayer {
-            let questionTile = QuestionBlockTile(whatInside:"coin")
-            questionTile.setTopLeft(point: Point(x: canvasSize.width / 3, y: canvasSize.height - 200 - 96 - 100))
-            let coin = Coin()
-            coin.setRect(newRect: questionTile.rect)
-            
-            questionTile.setInsideCoin(value: coin)
-            questionTile.setLevelHandler(handler: self)
-            
-            let questionTile2 = QuestionBlockTile(whatInside:"coin")
-            questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2 + 100, y: canvasSize.height - 200 - 96 - 100))
-            let coin2 = Coin()
-            coin2.setRect(newRect: questionTile2.rect)
-             
-            questionTile2.setInsideCoin(value: coin2)
-            questionTile2.setLevelHandler(handler: self)
+        
+        func levelTwo(canvasSize: Size) {
+            if let interactionLayer = interactionLayer {
+                let questionTile = QuestionBlockTile(whatInside:"coin")
+                questionTile.setTopLeft(point: Point(x: canvasSize.width / 3, y: canvasSize.height - 200 - 96 - 100))
+                let coin = Coin()
+                coin.setRect(newRect: questionTile.rect)
+                
+                questionTile.setInsideCoin(value: coin)
+                questionTile.setLevelHandler(handler: self)
+                
+                let questionTile2 = QuestionBlockTile(whatInside:"coin")
+                questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2 + 100, y: canvasSize.height - 200 - 96 - 100))
+                let coin2 = Coin()
+                coin2.setRect(newRect: questionTile2.rect)
+                
+                questionTile2.setInsideCoin(value: coin2)
+                questionTile2.setLevelHandler(handler: self)
                         
-            let groundCoin = Coin()
-            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
-            groundCoin.setActive(value: true)
-
-            let groundCoin2 = Coin()
+                let groundCoin = Coin()
+                groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+                groundCoin.setActive(value: true)
+                
+                let groundCoin2 = Coin()
             groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
             groundCoin2.setActive(value: true)
             
