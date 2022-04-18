@@ -142,7 +142,7 @@ class Mario : RenderableEntity {
                         box.setSquished(value: true)
                         shouldRenderStompSound = true
                         if let levelHandler = levelHandler {
-                            levelHandler.setScore(value: levelHander.score + 2)
+                            levelHandler.setScore(value: levelHandler.score + 2)
                         }
                         return;
                     }
