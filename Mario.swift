@@ -141,6 +141,9 @@ class Mario : RenderableEntity {
                         velocityY = -10
                         box.setSquished(value: true)
                         shouldRenderStompSound = true
+                        if let levelHandler = levelHandler {
+                            levelHandler.setScore(value: levelHander.score + 2)
+                        }
                         return;
                     }
 

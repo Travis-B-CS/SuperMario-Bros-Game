@@ -85,6 +85,14 @@ class LevelHandler : RenderableEntity {
                 levelFive(canvasSize: canvasSize)
             case 6:
                 levelSix(canvasSize: canvasSize)
+            case 7:
+                levelSeven(canvasSize: canvasSize)
+            case 8:
+                levelEight(canvasSize: canvasSize)
+            case 9:
+                levelNine(canvasSize: canvasSize)                
+            case 10:
+                levelTen(canvasSize: canvasSize)
             default:
                 setLives(value: 0)
             }
