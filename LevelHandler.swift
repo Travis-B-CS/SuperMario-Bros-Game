@@ -158,12 +158,15 @@ class LevelHandler : RenderableEntity {
     }
 
     func setScore(value: Int) {
-        score = value          
+        score = value
     }
-    
+        
     func setLives(value: Int) {
         if lives > value {
             score -= 5
+            if score < 0 {
+                score = 0
+            }
         }
         lives = value
         if(lives <= 0 ) {
