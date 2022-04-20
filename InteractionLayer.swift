@@ -57,6 +57,10 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
         keysDown = frozenKeysDown
         frozenKeysDown.removeAll();
 
+        if(levelHandler.lives <= 0) {
+            return
+        }
+
         if(keysDown.contains("w") || keysDown.contains("ArrowUp")) {
             marioSprite.jump()
         }

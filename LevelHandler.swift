@@ -95,6 +95,8 @@ class LevelHandler : RenderableEntity {
                 levelTen(canvasSize: canvasSize)
             default:
                 setLives(value: 0)
+                marioSprite.setVelocityX(new: 0)
+                marioSprite.setVelocityY(new: 0)
             }
         }
     }
@@ -151,38 +153,38 @@ class LevelHandler : RenderableEntity {
             }
         }
     }
-        func setHandler(handler:InteractionLayer) {
-            interactionLayer = handler;
-        }
+    func setHandler(handler:InteractionLayer) {
+        interactionLayer = handler;
+    }
 
-        func setScore(value: Int) {
-            score = value          
+    func setScore(value: Int) {
+        score = value          
+    }
+    
+    func setLives(value: Int) {
+        if lives > value {
+            score -= 5
         }
-        
-        func setLives(value: Int) {
-            if lives > value {
-                score -= 5
-            }
-            lives = value
-            if(lives <= 0 ) {
-                clearLevel()
-                if let interactionLayer = interactionLayer {
-                    interactionLayer.clearKeysDown()
-                    marioSprite.setVelocityX(new: 0)
-                    marioSprite.setVelocityY(new: 0)
-                }
-            }
-        }
-
-        func setFrozenTimer(value: Int) {
-            frozenTimer = value
+        lives = value
+        if(lives <= 0 ) {
+            clearLevel()
             if let interactionLayer = interactionLayer {
                 interactionLayer.clearKeysDown()
                 marioSprite.setVelocityX(new: 0)
                 marioSprite.setVelocityY(new: 0)
             }
-
         }
+    }
+    
+    func setFrozenTimer(value: Int) {
+        frozenTimer = value
+        if let interactionLayer = interactionLayer {
+            interactionLayer.clearKeysDown()
+            marioSprite.setVelocityX(new: 0)
+            marioSprite.setVelocityY(new: 0)
+        }
+        
+    }
         
         func clearLevel() {
             for entity in activeEntities {
