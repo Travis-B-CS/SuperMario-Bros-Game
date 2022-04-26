@@ -75,7 +75,8 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
             marioSprite.setVelocityX(new: 10.0)
         }
     }
-    
+
+    // function for handling key presses
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         if(levelHandler.lives <= 0 || levelHandler.frozenTimer > 0) {
             frozenKeysDown.append(key)
@@ -99,6 +100,7 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
         }
     }
 
+    // function for handling key unpresses
     func onKeyUp(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         if(levelHandler.lives <= 0 || levelHandler.frozenTimer > 0) {
             if(frozenKeysDown.contains(key)) {

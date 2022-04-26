@@ -39,10 +39,12 @@ class LevelHandler : RenderableEntity {
         marioSprite = mario
         
         super.init(name: "LevelHandler")
-        
+
+        // adds this instance of the level handler class to the mario class instance in order to be able to use functions from this class.
         marioSprite.setLevelHandler(handler: self)
     }
-    
+
+    // gets a string with 4 digits with zeros as the leading numbers.
     func getFourZeroes(x:Int) -> String {
         var y = String(x)
         for _ in 0 ..< 4 - String(x).count {
@@ -56,14 +58,17 @@ class LevelHandler : RenderableEntity {
     }
     
     override func calculate(canvasSize: Size) {
+        // if screen is frozen
         if(frozenTimer > 0) {
             frozenTimer -= 1
             if(frozenTimer == 0) {
+                // sets the keys back to what they were before freezing
                 if let interactionLayer = interactionLayer {
                     interactionLayer.unclearKeysDown()
                 }
             }
         }
+        // change levels if mario is on the right side of the boundaries.
         if(marioSprite.topLeft.x + marioSprite.marioSize.width > marioSprite.cSize.width + 10) {
             shouldRenderStageClear = true
             clearLevel()
@@ -104,25 +109,28 @@ class LevelHandler : RenderableEntity {
     override func render(canvas: Canvas) {
         if(lives <= 0) {
             if let canvasSize = canvas.canvasSize {
-                // Render Text:
+                // Render Text if game over:
                 let gameOverText = Text(location:canvasSize.center, text:"GAME OVER!")
                 gameOverText.font = "60pt Arial"
                 gameOverText.alignment = .center
                 canvas.render(gameOverText)
             }
         }
-        
+
+        // render sound if needed
         if shouldRenderStageClear && stageClearSound.isReady {
             canvas.render(stageClearSound)
             shouldRenderStageClear = false
         }
-        
+
+        // render the score text
         let text = Text(location:Point(x:50, y:90), text:getFourZeroes(x:score))
         text.font = "30pt Arial"
         text.alignment = .left
         canvas.render(text)
         
         if let canvasSize = canvas.canvasSize {
+            // render the lives mushroom images
             if mushroomImage.isReady {
                 if lives == 3 {
                     let shroomDestinationRectLeft = Rect(topLeft:Point(x: (canvasSize.width / 2 - 30 - 15 - 60), y: 15), size:Size(width:60, height:60))
@@ -153,6 +161,8 @@ class LevelHandler : RenderableEntity {
             }
         }
     }
+
+    // be able to use interaction layer functions from this instance of this class
     func setHandler(handler:InteractionLayer) {
         interactionLayer = handler;
     }
@@ -160,7 +170,7 @@ class LevelHandler : RenderableEntity {
     func setScore(value: Int) {
         score = value
     }
-        
+
     func setLives(value: Int) {
         if lives > value {
             score -= 5
@@ -178,89 +188,94 @@ class LevelHandler : RenderableEntity {
             }
         }
     }
-    
+
+    // set the frozen timer & stops mario from being able to move.
     func setFrozenTimer(value: Int) {
         frozenTimer = value
-        if let interactionLayer = interactionLayer {
-            interactionLayer.clearKeysDown()
-            marioSprite.setVelocityX(new: 0)
-            marioSprite.setVelocityY(new: 0)
-        }
-        
-    }
-        
-        func clearLevel() {
-            for entity in activeEntities {
-                if let interactionLayer = interactionLayer {                
-                    interactionLayer.removeEntity(entity:entity)
-                }
+        if value > 0 {
+            if let interactionLayer = interactionLayer {
+                interactionLayer.clearKeysDown()
+                marioSprite.setVelocityX(new: 0)
+                marioSprite.setVelocityY(new: 0)
             }
-            marioSprite.setGoombas(tiles: [])
-            marioSprite.setBoxes(tiles: [])
-            marioSprite.setCoins(tiles: [])
+        }
+    }
+
+    // clear the level of objects
+    func clearLevel() {
+        for entity in activeEntities {
+            if let interactionLayer = interactionLayer {                
+                interactionLayer.removeEntity(entity:entity)
+            }
+        }
+        marioSprite.setGoombas(tiles: [])
+        marioSprite.setBoxes(tiles: [])
+        marioSprite.setCoins(tiles: [])
         activeEntities = []
         
         marioSprite.topLeft = Point(x:10, y:marioSprite.topLeft.y)
+    }
+
+    // sets up level one
+    func levelOne(canvasSize:Size) {
+        if let interactionLayer = interactionLayer {
+            let questionTile = QuestionBlockTile(whatInside:"coin")
+            questionTile.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
+            let coin = Coin()
+            coin.setRect(newRect: questionTile.rect)
+                
+            questionTile.setInsideCoin(value: coin)
+            questionTile.setLevelHandler(handler: self)
+            
+            let groundCoin = Coin()
+            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin.setActive(value: true)
+            
+            let groundCoin2 = Coin()
+            groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 400, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin2.setActive(value: true)
+            
+            let groundCoin3 = Coin()
+            groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 600, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin3.setActive(value: true)
+            
+            interactionLayer.renderCoin(coin: groundCoin)
+            interactionLayer.renderCoin(coin: groundCoin2)
+            interactionLayer.renderCoin(coin: groundCoin3)
+            interactionLayer.renderCoin(coin: coin)
+            interactionLayer.renderQuestionBlockTile(questionTile: questionTile)
+            
+            marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
+            marioSprite.setBoxes(tiles: [questionTile])
+            
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin])
         }
-        
-        func levelOne(canvasSize:Size) {
-            if let interactionLayer = interactionLayer {
-                let questionTile = QuestionBlockTile(whatInside:"coin")
-                questionTile.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
-                let coin = Coin()
-                coin.setRect(newRect: questionTile.rect)
-                
-                questionTile.setInsideCoin(value: coin)
-                questionTile.setLevelHandler(handler: self)
-                
-                let groundCoin = Coin()
-                groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
-                groundCoin.setActive(value: true)
-                
-                let groundCoin2 = Coin()
-                groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 400, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
-                groundCoin2.setActive(value: true)
-                
-                let groundCoin3 = Coin()
-                groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 600, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
-                groundCoin3.setActive(value: true)
-                
-                interactionLayer.renderCoin(coin: groundCoin)
-                interactionLayer.renderCoin(coin: groundCoin2)
-                interactionLayer.renderCoin(coin: groundCoin3)
-                interactionLayer.renderCoin(coin: coin)
-                interactionLayer.renderQuestionBlockTile(questionTile: questionTile)
-                
-                marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
-                marioSprite.setBoxes(tiles: [questionTile])
-                
-                activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, questionTile, coin])
-            }
-        }
-        
-        func levelTwo(canvasSize: Size) {
-            if let interactionLayer = interactionLayer {
-                let questionTile = QuestionBlockTile(whatInside:"coin")
-                questionTile.setTopLeft(point: Point(x: canvasSize.width / 3, y: canvasSize.height - 200 - 96 - 100))
-                let coin = Coin()
-                coin.setRect(newRect: questionTile.rect)
-                
-                questionTile.setInsideCoin(value: coin)
-                questionTile.setLevelHandler(handler: self)
-                
-                let questionTile2 = QuestionBlockTile(whatInside:"coin")
-                questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2 + 100, y: canvasSize.height - 200 - 96 - 100))
-                let coin2 = Coin()
-                coin2.setRect(newRect: questionTile2.rect)
-                
-                questionTile2.setInsideCoin(value: coin2)
-                questionTile2.setLevelHandler(handler: self)
-                        
-                let groundCoin = Coin()
-                groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
-                groundCoin.setActive(value: true)
-                
-                let groundCoin2 = Coin()
+    }
+
+    // setups up level two
+    func levelTwo(canvasSize: Size) {
+        if let interactionLayer = interactionLayer {
+            let questionTile = QuestionBlockTile(whatInside:"coin")
+            questionTile.setTopLeft(point: Point(x: canvasSize.width / 3, y: canvasSize.height - 200 - 96 - 100))
+            let coin = Coin()
+            coin.setRect(newRect: questionTile.rect)
+            
+            questionTile.setInsideCoin(value: coin)
+            questionTile.setLevelHandler(handler: self)
+            
+            let questionTile2 = QuestionBlockTile(whatInside:"coin")
+            questionTile2.setTopLeft(point: Point(x: canvasSize.width / 2 + 100, y: canvasSize.height - 200 - 96 - 100))
+            let coin2 = Coin()
+            coin2.setRect(newRect: questionTile2.rect)
+            
+            questionTile2.setInsideCoin(value: coin2)
+            questionTile2.setLevelHandler(handler: self)
+            
+            let groundCoin = Coin()
+            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2 - 200, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin.setActive(value: true)
+            
+            let groundCoin2 = Coin()
             groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width / 2, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
             groundCoin2.setActive(value: true)
             
@@ -290,6 +305,7 @@ class LevelHandler : RenderableEntity {
 
     }
 
+    // sets up level three
     func levelThree(canvasSize: Size) {
         if let interactionLayer = interactionLayer {
             let questionTile = QuestionBlockTile(whatInside:"coin")
@@ -361,7 +377,8 @@ class LevelHandler : RenderableEntity {
         }
        
     }
-    
+
+    // sets up level four
     func levelFour(canvasSize: Size) {
         if let interactionLayer = interactionLayer {
             let groundCoin = Coin()
@@ -403,6 +420,7 @@ class LevelHandler : RenderableEntity {
                 
     }
 
+    // sets up level five
     func levelFive(canvasSize: Size) {
         if let interactionLayer = interactionLayer {
             let goomba = Goomba()
@@ -451,6 +469,7 @@ class LevelHandler : RenderableEntity {
         }
     }
 
+    // sets up level six
     func levelSix(canvasSize: Size) {
         if let interactionLayer = interactionLayer {
             let groundCoin = Coin()
@@ -505,15 +524,19 @@ class LevelHandler : RenderableEntity {
         }
     }
 
+    // sets up level seven
     func levelSeven(canvasSize: Size) {
     }
 
+    // sets up level eight
     func levelEight(canvasSize: Size) {
     }
 
+    // sets up level nine
     func levelNine(canvasSize: Size) {
     }
 
+    // set up level ten
     func levelTen(canvasSize: Size) {
     }
 }

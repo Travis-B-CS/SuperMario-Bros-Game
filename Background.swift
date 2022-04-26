@@ -19,7 +19,8 @@ class Background : RenderableEntity {
     var didGetInfo = false
     var bounds = Size(width:0,height:0)
     var time : Date
-    
+
+    // Returns a string with four numbers, replacing the leading numbers with zeros.
     func getFourZeroes(x:Int) -> String {
         var y = String(x)
         for _ in 0 ..< 4 - String(x).count {
@@ -27,13 +28,15 @@ class Background : RenderableEntity {
         }
         return y
     }
-    
+
+    // Get the width needed to not be out of bounds.
     func getWidthWithinBounds(x: Int, width: Int) -> Int {
         if(x > bounds.width) {return 0;}
         if(x + width <= bounds.width) {return width;}
         return width - ((x + width) - bounds.width);
     }
-    
+
+    // gets the height needed to not be out of bounds.
     func getHeightWithinBounds(y: Int, height: Int) -> Int {
         if(y > bounds.height) {return 0;}
         if(y + height <= bounds.height) {return height;}
@@ -60,6 +63,7 @@ class Background : RenderableEntity {
         
         background = Rectangle(rect:Rect(topLeft:Point(x:0,y:0), size:Size(width:Int.max,height:Int.max)), fillMode:.fill)
         
+        // the initial starting time.
         time = Date()
         
         // Using a meaningful name can be helpful for debugging
@@ -75,9 +79,11 @@ class Background : RenderableEntity {
     override func render(canvas:Canvas) {            
         if let canvasSize = canvas.canvasSize, !didGetInfo {
             didGetInfo = true
-            
+
+            // sets the bounds
             bounds = Size(width:canvasSize.width - 10, height: canvasSize.height - 30)
-            
+
+            // sets the background render
             background = Rectangle(rect:Rect(topLeft:Point(x:0,y:0), size:bounds), fillMode:.fill)
         }
         
@@ -90,17 +96,20 @@ class Background : RenderableEntity {
 
             // Render scores/text:
             canvas.render(FillStyle(color:Color(.white)), StrokeStyle(color:Color(.white)))
-            
+
+            // render the mario label
             var text = Text(location:Point(x:50, y:50), text:"MARIO")
             text.font = "30pt Arial"
             text.alignment = .left
             canvas.render(text)
-            
+
+            // render the time label
             text = Text(location:Point(x:bounds.width - 200, y:50), text:"TIME")
             text.font = "30pt Arial"
             text.alignment = .left
             canvas.render(text)
 
+            // render the actual time
             text = Text(location:Point(x:bounds.width - 200, y:90), text: getFourZeroes(x: Int(Date().timeIntervalSince1970 - time.timeIntervalSince1970)))
             text.font = "30pt Arial"
             text.alignment = .left
@@ -118,6 +127,7 @@ class Background : RenderableEntity {
                 }
             }
 
+            // render clouds
             if cloudImage.isReady && bigCloudImage.isReady {
                 let cloudDestinationRect = Rect(topLeft:Point(x:bounds.width / 4, y:bounds.height / 5), size:Size(width:96, height:96))
                 cloudImage.renderMode = .destinationRect(cloudDestinationRect)
@@ -140,6 +150,7 @@ class Background : RenderableEntity {
                 bigCloudImage.renderMode = .destinationRect(bigCloudDestinationRectC)
                 canvas.render(bigCloudImage)
             }
+            // render bushes
             if bushImage.isReady && bigBushImage.isReady {
                 let bushDestinationRect = Rect(topLeft:Point(x:bounds.width / 4, y:bounds.height - 96 - 192), size:Size(width:192, height:192))
                 bushImage.renderMode = .destinationRect(bushDestinationRect)

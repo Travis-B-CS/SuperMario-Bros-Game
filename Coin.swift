@@ -71,7 +71,8 @@ class Coin : RenderableEntity {
             canvas.render(coinSound)
             shouldRenderCoinSound = false
         }
-        
+
+        //  switches the images depending on the frame.
         if(isActive) {
             switch(currentAnimationFrameCount / 5) {
             case 0:

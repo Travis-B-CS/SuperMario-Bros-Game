@@ -85,9 +85,11 @@ class Goomba : RenderableEntity {
                 goombaSquished.renderMode = .destinationRect(Rect(topLeft:topLeft, size:Size(width: 92, height: 92)))
                 canvas.render(goombaSquished)
             }
+            setVelocityX(value: 0)
             return;
         }
-        
+
+        // switches the feet if walking
         if(animationFrame / 10 == 0) {
             if(goombaLeft.isReady) {
                 goombaLeft.renderMode = .destinationRect(Rect(topLeft:topLeft, size:Size(width: 92, height: 92)))
