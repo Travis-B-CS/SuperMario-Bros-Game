@@ -110,6 +110,12 @@ class LevelHandler : RenderableEntity {
     }
     
     override func render(canvas: Canvas) {
+        // render the score text
+        let text = Text(location:Point(x:50, y:90), text:getFourZeroes(x:score))
+        text.font = "30pt Arial"
+        text.alignment = .left
+        canvas.render(text)
+
         if(lives <= 0) {
             if let canvasSize = canvas.canvasSize {
                 // Render Text if game over:
@@ -146,12 +152,6 @@ class LevelHandler : RenderableEntity {
             canvas.render(stageClearSound)
             shouldRenderStageClear = false
         }
-
-        // render the score text
-        let text = Text(location:Point(x:50, y:90), text:getFourZeroes(x:score))
-        text.font = "30pt Arial"
-        text.alignment = .left
-        canvas.render(text)
         
         if let canvasSize = canvas.canvasSize {
             // render the lives mushroom images
