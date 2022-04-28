@@ -98,6 +98,11 @@ class InteractionLayer : Layer, KeyDownHandler, KeyUpHandler {
         else if(key == "d" || key == "ArrowRight") {
             marioSprite.setVelocityX(new: 10.0)
         }
+
+        // cheat mode (inf lives!!!)
+        if(keysDown.contains("i") && keysDown.contains("n") && keysDown.contains("f")) {
+            levelHandler.setCheats(value: true)
+        }
     }
 
     // function for handling key unpresses

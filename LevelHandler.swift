@@ -16,6 +16,8 @@ class LevelHandler : RenderableEntity {
     
     let mushroomImage : Image
     let castleImage : Image
+
+    var cheats = false
     
     init(mario:Mario) {
         func getAudio(url:String, loop:Bool) -> Audio { // function for getting audio
@@ -100,7 +102,7 @@ class LevelHandler : RenderableEntity {
             case 10:
                 levelTen(canvasSize: canvasSize)
             default:
-                setLives(value: 0)
+                setLives(value: 0, bypass: true)
                 marioSprite.setVelocityX(new: 0)
                 marioSprite.setVelocityY(new: 0)
             }
@@ -179,14 +181,16 @@ class LevelHandler : RenderableEntity {
         score = value
     }
 
-    func setLives(value: Int) {
-        if lives > value {
+    func setLives(value: Int, bypass: Bool = false) {
+        if (lives > value && bypass == false) {
             score -= 5
             if score < 0 {
                 score = 0
             }
         }
-        lives = value
+        if cheats == false {
+            lives = value
+        }
         if(lives <= 0 ) {
             clearLevel()
             if let interactionLayer = interactionLayer {
@@ -195,6 +199,10 @@ class LevelHandler : RenderableEntity {
                 marioSprite.setVelocityY(new: 0)
             }
         }
+    }
+
+    func setCheats(value: Bool) {
+        self.cheats = value
     }
 
     // set the frozen timer & stops mario from being able to move.
