@@ -534,7 +534,66 @@ class LevelHandler : RenderableEntity {
 
     // sets up level seven
     func levelSeven(canvasSize: Size) {
-        
+        if let interactionLayer = interactionLayer {
+
+            let goomba = Goomba()
+            goomba.setTopLeft(value: Point(x: canvasSize.width / 4, y: canvasSize.height - 96 - 96 - 30))
+            goomba.setVelocityX(value: 2)
+            
+            let goomba2 = Goomba()
+            goomba2.setTopLeft(value: Point(x: canvasSize.width / 2, y: canvasSize.height - 96 - 96 - 30))
+            goomba2.setVelocityX(value: 4)
+            
+            let goomba3 = Goomba()
+            goomba3.setTopLeft(value: Point(x: canvasSize.width / 2 + (canvasSize.width / 4), y: canvasSize.height - 96 - 96 - 30))
+            goomba3.setVelocityX(value: 2)
+
+            let goomba4 = Goomba()
+            goomba4.setTopLeft(value: Point(x: canvasSize.width, y: canvasSize.height - 96 - 96 - 30))
+            goomba4.setVelocityX(value: 4)
+                        
+            let tile1 = QuestionBlockTile(whatInside:"don't animate")
+            tile1.setTopLeft(point: Point(x: canvasSize.width / 2 - 96, y: canvasSize.height - 200 - 96 - 100))
+            tile1.setActivated(value: true)
+                        
+            let tile2 = QuestionBlockTile(whatInside:"don't animate")
+            tile2.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
+            tile2.setActivated(value: true)
+
+            let tile3 = QuestionBlockTile(whatInside:"don't animate")
+            tile3.setTopLeft(point: Point(x: canvasSize.width / 4 - 96, y: canvasSize.height - 200 - 96 - 100))
+            tile3.setActivated(value: true)
+                        
+            let tile4 = QuestionBlockTile(whatInside:"don't animate")
+            tile4.setTopLeft(point: Point(x: canvasSize.width / 4, y: canvasSize.height - 200 - 96 - 100))
+            tile4.setActivated(value: true)
+            
+            let tile5 = QuestionBlockTile(whatInside:"don't animate")
+            tile5.setTopLeft(point: Point(x: canvasSize.width / 2 + (canvasSize.width / 4 - 96), y: canvasSize.height - 200 - 96 - 100))
+            tile5.setActivated(value: true)
+                        
+            let tile6 = QuestionBlockTile(whatInside:"don't animate")
+            tile6.setTopLeft(point: Point(x: canvasSize.width / 2 + (canvasSize.width / 4), y: canvasSize.height - 200 - 96 - 100))
+            tile6.setActivated(value: true)
+            
+            interactionLayer.renderGoomba(goomba: goomba)
+            interactionLayer.renderGoomba(goomba: goomba2)
+            interactionLayer.renderGoomba(goomba: goomba3)
+            interactionLayer.renderGoomba(goomba: goomba4)
+
+            interactionLayer.renderQuestionBlockTile(questionTile: tile1)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile2)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile3)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile4)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile5)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile6)
+                        
+            marioSprite.setGoombas(tiles: [goomba, goomba2, goomba3, goomba4])
+            marioSprite.setBoxes(tiles: [tile1, tile2, tile3, tile4, tile5, tile6])
+            
+            activeEntities.append(contentsOf:[goomba, goomba2, goomba3, goomba4, tile1, tile2, tile3, tile4, tile5, tile6])
+
+        }
     }
 
     // sets up level eight
