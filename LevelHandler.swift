@@ -127,16 +127,17 @@ class LevelHandler : RenderableEntity {
             }
 
             if marioSprite.marioSize.width <= 10 {
-                setLives(value: 0)
+                setLives(value: 0, bypass: true)
                 return
             }
 
-            if marioSprite.topLeft.x >= canvasSize.width - 160 - 80 {
+            if marioSprite.topLeft.x >= canvasSize.width - 160 - 85 {
                 // entered the castle door
+                marioSprite.stopWorking() // makes velocity do nothing, so player can't control it.
+                
                 marioSprite.setMarioSize(size: Size(width: marioSprite.marioSize.width - 2, height: marioSprite.marioSize.height - 3))
                 marioSprite.topLeft.x += 1
                 marioSprite.topLeft.y += 1
-                marioSprite.stopWorking()
             }
         }
 
@@ -201,7 +202,7 @@ class LevelHandler : RenderableEntity {
                 score = 0
             }
         }
-        if cheats == false {
+        if cheats == false || bypass == true {
             lives = value
         }
         if(lives <= 0 ) {
@@ -658,9 +659,64 @@ class LevelHandler : RenderableEntity {
             activeEntities.append(contentsOf:[goomba, goomba3, tile1, tile2, tile5, tile6])
         }
     }
-
+    
     // sets up level nine
     func levelNine(canvasSize: Size) {
+        if let interactionLayer = interactionLayer {
+            let groundCoin = Coin()
+            groundCoin.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width - 96, y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin.setActive(value: true)
+
+            let groundCoin2 = Coin()
+            groundCoin2.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width - (96 * 2), y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin2.setActive(value: true)
+            
+            let groundCoin3 = Coin()
+            groundCoin3.setRect(newRect: Rect(topLeft:Point(x: canvasSize.width - (96 * 3), y: canvasSize.height - 50 - 96 - 100), size:Size(width: 96, height: 96)))
+            groundCoin3.setActive(value: true)
+
+            let goomba = Goomba()
+            goomba.setTopLeft(value: Point(x: canvasSize.width / 4, y: canvasSize.height - 96 - 96 - 30))
+            goomba.setVelocityX(value: 7)
+                    
+            let goomba2 = Goomba()
+            goomba2.setTopLeft(value: Point(x: canvasSize.width * 3 / 4, y: canvasSize.height - 96 - 96 - 30))
+            goomba2.setVelocityX(value: -7)
+
+            let tile1 = QuestionBlockTile(whatInside:"don't animate")
+            tile1.setTopLeft(point: Point(x: canvasSize.width / 2 - (96 * 2), y: canvasSize.height - 200 - 96 - 100))
+            tile1.setActivated(value: true)
+                        
+            let tile2 = QuestionBlockTile(whatInside:"don't animate")
+            tile2.setTopLeft(point: Point(x: canvasSize.width / 2 + (96 * 2), y: canvasSize.height - 200 - 96 - 100))
+            tile2.setActivated(value: true)
+
+            let insideCoin = Coin()
+            insideCoin.setRect(newRect: Rect(topLeft: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100), size: Size(width:96, height:96)))
+            insideCoin.setActive(value: false)
+
+            let tile3 = QuestionBlockTile(whatInside:"coin")
+            tile3.setTopLeft(point: Point(x: canvasSize.width / 2, y: canvasSize.height - 200 - 96 - 100))
+            tile3.setActivated(value: false)
+            tile3.setInsideCoin(value: insideCoin)
+            tile3.setLevelHandler(handler: self)
+
+            interactionLayer.renderCoin(coin: groundCoin)
+            interactionLayer.renderCoin(coin: groundCoin2)
+            interactionLayer.renderCoin(coin: groundCoin3)
+            interactionLayer.renderCoin(coin: insideCoin)
+            interactionLayer.renderGoomba(goomba: goomba)
+            interactionLayer.renderGoomba(goomba: goomba2)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile1)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile2)
+            interactionLayer.renderQuestionBlockTile(questionTile: tile3)
+            
+            marioSprite.setCoins(tiles: [groundCoin, groundCoin2, groundCoin3])
+            marioSprite.setGoombas(tiles: [goomba, goomba2])
+            marioSprite.setBoxes(tiles: [tile1, tile2, tile3])
+            
+            activeEntities.append(contentsOf:[groundCoin, groundCoin2, groundCoin3, goomba, goomba2, tile1, tile2, tile3, insideCoin]) 
+        }
     }
 
     // set up level ten
