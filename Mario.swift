@@ -35,6 +35,16 @@ class Mario : RenderableEntity {
     var goombas : [Goomba] = []
     
     var levelHandler : LevelHandler?
+
+    var doNothing = false
+
+    func stopWorking() {
+        doNothing = true
+    }
+
+    func setMarioSize(size: Size) {
+        marioSize = size
+    }
     
     init(tiles:[QuestionBlockTile]) {
         func getImage(url:String) -> Image { // A function for getting Images
@@ -68,6 +78,8 @@ class Mario : RenderableEntity {
         jumpSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_jump-small.wav", loop: false)
         stompSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_stomp.wav", loop: false)
 
+        marioSize = Size(width:107, height:140)
+        
         super.init(name: "Mario")
     }
     
@@ -76,7 +88,11 @@ class Mario : RenderableEntity {
         cSize = canvasSize
     }
     
-    override func calculate(canvasSize: Size) {        
+    override func calculate(canvasSize: Size) {
+        if doNothing == true {
+            return
+        }
+        
         topLeft.x += Int(velocityX)
         topLeft.y += Int(velocityY)
 
@@ -175,8 +191,6 @@ class Mario : RenderableEntity {
     var currentStance = "right"
     
     override func render(canvas:Canvas) {
-        marioSize = Size(width:107, height:140)
-
         if shouldRenderStompSound && stompSound.isReady {
             shouldRenderStompSound = false
             canvas.render(stompSound)

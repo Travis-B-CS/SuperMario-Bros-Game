@@ -120,10 +120,23 @@ class LevelHandler : RenderableEntity {
             }
         }
 
-        if currentLevel == 10 {
-            if castleImage.isReady, let canvasSize = canvas.canvasSize {
+        if currentLevel == 10, let canvasSize = canvas.canvasSize {
+            if castleImage.isReady {
                 castleImage.renderMode = .destinationRect(Rect(topLeft: Point(x: canvasSize.width - 320 - 30, y: canvasSize.height - 92 - 376 - 30), size: Size(width: 320, height: 376)))
                 canvas.render(castleImage)
+            }
+
+            if marioSprite.marioSize.width <= 10 {
+                setLives(value: 0)
+                return
+            }
+
+            if marioSprite.topLeft.x >= canvasSize.width - 160 - 80 {
+                // entered the castle door
+                marioSprite.setMarioSize(size: Size(width: marioSprite.marioSize.width - 2, height: marioSprite.marioSize.height - 3))
+                marioSprite.topLeft.x += 1
+                marioSprite.topLeft.y += 1
+                marioSprite.stopWorking()
             }
         }
 
