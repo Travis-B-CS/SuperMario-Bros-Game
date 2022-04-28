@@ -116,7 +116,7 @@ class Mario : RenderableEntity {
                         // need to see which side it came from so can stop velocityX and reset its position
                         if(topLeft.x > box.rect.topLeft.x + box.rect.size.width / 2) {
                             topLeft.x = box.rect.topLeft.x + box.rect.size.width
-                        } else if(topLeft.x + marioSize.width < box.rect.topLeft.x - box.rect.size.width / 2) {
+                        } else if(topLeft.x + marioSize.width > box.rect.topLeft.x) {
                             topLeft.x = box.rect.topLeft.x - marioSize.width
                         }
                         continue;

@@ -15,6 +15,7 @@ class LevelHandler : RenderableEntity {
     var shouldRenderStageClear = false
     
     let mushroomImage : Image
+    let castleImage : Image
     
     init(mario:Mario) {
         func getAudio(url:String, loop:Bool) -> Audio { // function for getting audio
@@ -33,7 +34,7 @@ class LevelHandler : RenderableEntity {
         
         stageClearSound = getAudio(url: "https://www.codermerlin.com/users/brett-kaplan/mario/sounds/smb_stage_clear.wav", loop:false)
         
-        
+        castleImage = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/castle.png")
         mushroomImage = getImage(url: "https://www.codermerlin.com/users/brett-kaplan/mario/mushroom.png")
         
         marioSprite = mario
@@ -54,7 +55,7 @@ class LevelHandler : RenderableEntity {
     }
     
     override func setup(canvasSize:Size, canvas:Canvas) {
-        canvas.setup(stageClearSound, mushroomImage)
+        canvas.setup(stageClearSound, mushroomImage, castleImage)
     }
     
     override func calculate(canvasSize: Size) {
@@ -114,6 +115,13 @@ class LevelHandler : RenderableEntity {
                 gameOverText.font = "60pt Arial"
                 gameOverText.alignment = .center
                 canvas.render(gameOverText)
+            }
+        }
+
+        if currentLevel == 10 {
+            if castleImage.isReady, let canvasSize = canvas.canvasSize {
+                castleImage.renderMode = .destinationRect(Rect(topLeft: Point(x: canvasSize.width - 320 - 30, y: canvasSize.height - 92 - 376 - 30), size: Size(width: 320, height: 376)))
+                canvas.render(castleImage)
             }
         }
 
@@ -204,7 +212,7 @@ class LevelHandler : RenderableEntity {
     // clear the level of objects
     func clearLevel() {
         for entity in activeEntities {
-            if let interactionLayer = interactionLayer {                
+            if let interactionLayer = interactionLayer {
                 interactionLayer.removeEntity(entity:entity)
             }
         }
@@ -526,6 +534,7 @@ class LevelHandler : RenderableEntity {
 
     // sets up level seven
     func levelSeven(canvasSize: Size) {
+        
     }
 
     // sets up level eight
