@@ -732,4 +732,3 @@ class LevelHandler : RenderableEntity {
     func levelTen(canvasSize: Size) {
     }
 }
-
