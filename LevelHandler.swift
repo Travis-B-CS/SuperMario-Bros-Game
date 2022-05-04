@@ -111,13 +111,13 @@ class LevelHandler : RenderableEntity {
     
     override func render(canvas: Canvas) {
         // render the score text
-        var text = Text(location:Point(x:50, y:90), text:getFourZeroes(x:score))
+        let text = Text(location:Point(x:50, y:90), text:getFourZeroes(x:score))
         text.font = "30pt Arial"
         text.alignment = .left
         canvas.render(text)
 
         if let canvasSize = canvas.canvasSize {
-            var text = Text(location:Point(x: canvasSize.width / 2, y:125), text:"LEVEL: \(currentLevel)")
+            let text = Text(location:Point(x: canvasSize.width / 2, y: (lives == 0 ? 50 : 125)), text:"LEVEL: \(currentLevel)")
             text.font = "30pt Arial"
             text.alignment = .center
             canvas.render(text)
